@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Propuesta Cliente - Telekos</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 40px;
+    }
+    .oferta {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h1 { color: #0c4a75; }
+    h2 { color: #f58220; border-bottom: 2px solid #f58220; padding-bottom: 5px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #dce3ea; padding: 10px; text-align: center; }
+    th { background: #f9fbfc; color: #0c4a75; }
+    .totales {
+      background: #0c4a75;
+      color: #fff;
+      font-weight: bold;
+      font-size: 18px;
+      padding: 15px;
+      text-align: right;
+      border-radius: 6px;
+      margin-top: 25px;
+    }
+    .observaciones {
+      margin-top: 25px;
+      background: #fffaf7;
+      border-left: 4px solid #f58220;
+      padding: 15px;
+      color: #444;
+      border-radius: 6px;
+    }
+    .comercial {
+      margin-top: 30px;
+      border-top: 2px solid #dce3ea;
+      padding-top: 20px;
+      color: #0c4a75;
+    }
+  </style>
+</head>
+<body>
+  <div class="oferta">
+    <h1>Propuesta Comercial</h1>
+    <p><strong>Fecha:</strong> <span id="fecha"></span></p>
+    <p><strong>Empresa:</strong> <span id="empresa"></span></p>
+
+    <h2>Servicios incluidos</h2>
+    <table id="tablaServiciosCliente">
+      <thead>
+        <tr>
+          <th>Servicio</th>
+          <th>Cantidad</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="totales">
+      <p>Total mensual (IVA incluido): <span id="totalMensual"></span> €</p>
+      <p>Coste de instalación (IVA incluido): <span id="instalacion"></span> €</p>
+    </div>
+
+    <div class="observaciones">
+      <strong>Observaciones:</strong>
+      <p id="observaciones"></p>
+    </div>
+
+    <div class="comercial">
+      <h3>Su comercial</h3>
+      <p><strong>Nombre:</strong> <span id="nombreComercial"></span></p>
+      <p><strong>Móvil:</strong> <span id="movilComercial"></span></p>
+      <p><strong>Teléfono fijo:</strong> <span id="fijoComercial"></span></p>
+      <p><strong>Email:</strong> <span id="emailComercial"></span></p>
+    </div>
+  </div>
+
+  <script>
+    const datos = JSON.parse(localStorage.getItem("ofertaTelekos"));
+
+    if (datos) {
+      document.getElementById("fecha").textContent = datos.fecha || "";
+      document.getElementById("empresa").textContent = datos.empresa || "";
+      document.getElementById("totalMensual").textContent = datos.totalMensualIVA || "0.00";
+      document.getElementById("instalacion").textContent = datos.instalacionIVA || "0.00";
+      document.getElementById("observaciones").textContent = datos.observaciones || "";
+
+      // Comercial
+      document.getElementById("nombreComercial").textContent = datos.comercial?.nombre || "";
+      document.getElementById("movilComercial").textContent = datos.comercial?.movil || "";
+      document.getElementById("fijoComercial").textContent = datos.comercial?.fijo || "";
+      document.getElementById("emailComercial").textContent = datos.comercial?.email || "";
+
+      // Servicios
+      const tbody = document.querySelector("#tablaServiciosCliente tbody");
+      datos.servicios.forEach(s => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${s.servicio}</td><td>${s.cantidad}</td>`;
+        tbody.appendChild(tr);
+      });
+    } else {
+      document.body.innerHTML = "<h2 style='text-align:center;color:#b82319'>⚠️ No hay datos de oferta cargados</h2>";
+    }
+  </script>
+</body>
+</html>
