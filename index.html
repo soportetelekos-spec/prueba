@@ -757,7 +757,7 @@ body::after {
     <input type="email" placeholder="nombre@empresa.com">
 
     <label>TELÉFONO FIJO:</label>
-     <input type="email" placeholder="91 088 50 50">
+     <input type="number" placeholder="91 088 50 50">
 
   </div>
 </div>
@@ -1197,6 +1197,68 @@ btnRechazar.addEventListener("click", (e) => {
   e.preventDefault();
   window.location.href = `${basePath}resultado.html?estado=rechazada`;
 });
+
+// NUEVO: vista cliente
+const btnVistaCliente = document.createElement("button");
+btnVistaCliente.textContent = "👁️ Vista Cliente";
+btnVistaCliente.className = "btn-final azul";
+document.querySelector(".botones-finales").appendChild(btnVistaCliente);
+
+// --- GUARDAR OFERTA EN LOCALSTORAGE Y ABRIR VISTA CLIENTE ---
+btnVistaCliente.addEventListener("click", () => {
+  // Crear objeto con los datos del formulario
+  const datos = {
+    fecha: document.getElementById("fechaOferta").value,
+    empresa: document.querySelector('input[placeholder="Escribe el nombre..."]')?.value || "",
+    comercial: {
+      nombre: document.querySelector('.comercial-info input[placeholder="Escribe el nombre..."]')?.value || "",
+      movil: document.querySelector('.comercial-info input[placeholder="Ej: 600 123 456"]')?.value || "",
+      email: document.querySelector('.comercial-info input[placeholder="nombre@empresa.com"]')?.value || "",
+      fijo: document.querySelector('.comercial-info input[placeholder="91 088 50 50"]')?.value || ""
+    },
+    observaciones: document.querySelector(".observaciones-box textarea")?.value || "",
+    totalMensualIVA: document.getElementById("mensualIVA")?.value || "",
+    instalacionIVA: document.getElementById("instalacionIVA")?.value || "",
+    servicios: []
+  };
+
+  // Guardar lista de servicios
+  document.querySelectorAll("#tablaServicios tbody tr").forEach(tr => {
+    const servicio =
+      tr.querySelector(".servicioSelect")?.selectedOptions[0]?.text ||
+      tr.querySelector(".servicioPersonalizado")?.value ||
+      "";
+    const cantidad = tr.querySelector(".cantidad")?.value || "";
+    const coste = tr.querySelector(".coste")?.value || "";
+    if (servicio) datos.servicios.push({ servicio, cantidad, coste });
+  });
+
+  // Guardar en localStorage
+  localStorage.setItem("ofertaTelekos", JSON.stringify(datos));
+
+  // Abrir versión cliente
+  window.open("propuesta-cliente.html", "_blank");
+});
+
+
+function guardarOferta() {
+  const datos = {
+    empresa: document.querySelector('input[placeholder="Escribe el nombre..."]')?.value,
+    totalMensual: document.getElementById("mensualIVA")?.value,
+    fecha: document.getElementById("fechaOferta")?.value,
+    servicios: []
+  };
+
+  document.querySelectorAll("#tablaServicios tbody tr").forEach(tr => {
+    const servicio = tr.querySelector(".servicioSelect")?.value ||
+                     tr.querySelector(".servicioPersonalizado")?.value;
+    const cantidad = tr.querySelector(".cantidad")?.value;
+    const coste = tr.querySelector(".coste")?.value;
+    if (servicio) datos.servicios.push({ servicio, cantidad, coste });
+  });
+
+  localStorage.setItem("ofertaTelekos", JSON.stringify(datos));
+}
 
 
   </script>
