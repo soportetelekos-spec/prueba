@@ -1190,12 +1190,28 @@ btnRechazar.addEventListener("click", () => {
   alert("❌ Oferta rechazada.");
 });
 
+btnAceptar.addEventListener("click", (e) => {
+  e.preventDefault();
+  window.location.href = "resultado.html?estado=aceptada";
+});
+
+btnRevisar.addEventListener("click", (e) => {
+  e.preventDefault();
+  const texto = comentarios.value.trim();
+  if (texto) {
+    window.location.href = "resultado.html?estado=revisar";
+  }
+});
+
+btnRechazar.addEventListener("click", (e) => {
+  e.preventDefault();
+  window.location.href = "resultado.html?estado=rechazada";
+});
 
 
   </script>
 </body>
 </html>
-
 
 
 
