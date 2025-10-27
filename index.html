@@ -1160,6 +1160,7 @@ $(document).ready(function() {
   observer.observe(document.querySelector("#tablaServicios tbody"), { childList: true });
 });
 // --- CONTROL DE BOTONES FINALES ---
+// --- CONTROL DE BOTONES FINALES ---
 const comentarios = document.getElementById("comentariosRevision");
 const btnRevisar = document.getElementById("revisarOferta");
 const btnRechazar = document.getElementById("rechazarOferta");
@@ -1171,8 +1172,9 @@ comentarios.addEventListener("input", () => {
   btnRevisar.disabled = !hayTexto;
 });
 
-// --- Redirecciones que funcionan tanto en Live Server como en GitHub Pages ---
-const basePath = window.location.pathname.replace("index.html", "");
+// --- Detectar si estamos en GitHub Pages o local ---
+const isGithub = window.location.hostname.includes("github.io");
+const basePath = isGithub ? "/prueba/" : "./";
 
 btnAceptar.addEventListener("click", (e) => {
   e.preventDefault();
@@ -1193,9 +1195,11 @@ btnRechazar.addEventListener("click", (e) => {
 });
 
 
+
   </script>
 </body>
 </html>
+
 
 
 
