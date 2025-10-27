@@ -1159,7 +1159,6 @@ $(document).ready(function() {
   const observer = new MutationObserver(() => activarSelect2());
   observer.observe(document.querySelector("#tablaServicios tbody"), { childList: true });
 });
-
 // --- CONTROL DE BOTONES FINALES ---
 const comentarios = document.getElementById("comentariosRevision");
 const btnRevisar = document.getElementById("revisarOferta");
@@ -1172,40 +1171,25 @@ comentarios.addEventListener("input", () => {
   btnRevisar.disabled = !hayTexto;
 });
 
-// Acciones simuladas
-btnAceptar.addEventListener("click", () => {
-  alert("✅ Oferta aceptada correctamente.");
-});
-
-btnRevisar.addEventListener("click", () => {
-  const texto = comentarios.value.trim();
-  if (texto) {
-    alert("🔍 Oferta enviada a revisión con tus comentarios:\n\n" + texto);
-    comentarios.value = "";
-    btnRevisar.disabled = true;
-  }
-});
-
-btnRechazar.addEventListener("click", () => {
-  alert("❌ Oferta rechazada.");
-});
+// --- Redirecciones que funcionan tanto en Live Server como en GitHub Pages ---
+const basePath = window.location.pathname.replace("index.html", "");
 
 btnAceptar.addEventListener("click", (e) => {
   e.preventDefault();
-  window.location.href = "resultado.html?estado=aceptada";
+  window.location.href = `${basePath}resultado.html?estado=aceptada`;
 });
 
 btnRevisar.addEventListener("click", (e) => {
   e.preventDefault();
   const texto = comentarios.value.trim();
   if (texto) {
-    window.location.href = "resultado.html?estado=revisar";
+    window.location.href = `${basePath}resultado.html?estado=revisar`;
   }
 });
 
 btnRechazar.addEventListener("click", (e) => {
   e.preventDefault();
-  window.location.href = "resultado.html?estado=rechazada";
+  window.location.href = `${basePath}resultado.html?estado=rechazada`;
 });
 
 
