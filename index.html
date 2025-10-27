@@ -1027,15 +1027,15 @@ document.getElementById("eliminarFila").addEventListener("click", (e) => {
 
 // --- AUTO RELLENO DE COSTE AL SELECCIONAR SERVICIO ---
 // --- AUTO RELLENO DE COSTE AL SELECCIONAR SERVICIO ---
-tabla.addEventListener("change", e => {
-  if (e.target.classList.contains("servicioSelect")) {
-    const fila = e.target.closest("tr");
-    const costeInput = fila.querySelector(".coste");
-    const valor = parseFloat(e.target.value) || 0;
-    costeInput.value = valor.toFixed(2);
-    actualizarTotales(); // <- recalcula todo al cambiar servicio
-  }
+// --- AUTO RELLENO DE COSTE AL SELECCIONAR SERVICIO (COMPATIBLE CON SELECT2) ---
+$(document).on('select2:select', '.servicioSelect', function (e) {
+  const fila = this.closest("tr");
+  const costeInput = fila.querySelector(".coste");
+  const valor = parseFloat(this.value) || 0;
+  costeInput.value = valor.toFixed(2);
+  actualizarTotales();
 });
+
 
 // --- ACTUALIZAR TOTAL AL CAMBIAR CANTIDAD O COSTE ---
 tabla.addEventListener("input", e => {
