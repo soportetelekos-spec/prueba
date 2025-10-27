@@ -703,7 +703,8 @@ body::after {
  </style>
 </head>
 <body>
-<form action="https://github.com/soportetelekos-spec/prueba/index.html" method="post" name"oferta"> 
+<form onsubmit="return false;">
+
   <!-- PÁGINA 1 -->
   <div class="container">
     <header>
@@ -1005,7 +1006,8 @@ document.getElementById("agregarPredefinido").addEventListener("click", () => {
 });
 
 // --- BOTÓN: AGREGAR SERVICIO PERSONALIZADO ---
-document.getElementById("agregarPersonalizado").addEventListener("click", () => {
+document.getElementById("agregarPersonalizado").addEventListener("click", (e) => {
+  e.preventDefault(); // ⛔ evita que el formulario se envíe
   const fila = document.createElement("tr");
   fila.innerHTML = `
     <td><input type="text" class="servicioPersonalizado" placeholder="Escribe el servicio..."></td>
@@ -1015,12 +1017,14 @@ document.getElementById("agregarPersonalizado").addEventListener("click", () => 
   tabla.appendChild(fila);
 });
 
+// --- BOTÓN: ELIMINAR FILA ---
+document.getElementById("eliminarFila").addEventListener("click", (e) => {
+  e.preventDefault(); // ⛔ evita recargar o enviar formulario
+  const filas = tabla.querySelectorAll("tr");
+  if (filas.length > 1) filas[filas.length - 1].remove();
+  actualizarTotales();
+});
 
-    document.getElementById("eliminarFila").addEventListener("click", () => {
-      const filas = tabla.querySelectorAll("tr");
-      if (filas.length > 1) filas[filas.length - 1].remove();
-      actualizarTotales();
-    });
 // --- AUTO RELLENO DE COSTE AL SELECCIONAR SERVICIO ---
 // --- AUTO RELLENO DE COSTE AL SELECCIONAR SERVICIO ---
 tabla.addEventListener("change", e => {
@@ -1195,11 +1199,9 @@ btnRechazar.addEventListener("click", (e) => {
 });
 
 
-
   </script>
 </body>
 </html>
-
 
 
 
