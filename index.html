@@ -25,7 +25,7 @@
   max-width: 850px;          /* Antes: width: 850px */
   width: 100%;
   background: #fff;
-  margin: 40px auto;
+  margin:0 auto;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   overflow: hidden;
@@ -75,7 +75,7 @@
   /* -------- BLOQUE SU COMERCIAL (EDITABLE) -------- */
 .comercial {
   width: 800px;
-  margin: 20px auto 50px;
+  margin: 0 auto;
   background-color: #f3f7fc;
   border: 1.5px solid #cdd5df;
   border-radius: 12px;
@@ -728,6 +728,99 @@ body::after {
   color: rgb(0, 0, 0);
 }
 
+/* 🔹 Quitar márgenes entre cuadros */
+section,
+div.card,
+div.contenedor-seccion,
+div.page1 > div,
+div.page2 > div {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* 🔧 Mantener aire interno agradable */
+.card,
+.contenedor-seccion {
+  padding: 15px 20px !important;   /* reduce si antes era 25-30px */
+}
+
+/* 🔧 Separación más ligera entre grupos de campos */
+fieldset, .form-group, .row {
+  margin-bottom: 8px !important;   /* reduce altura entre inputs */
+}
+
+/* 🔧 Visual: línea sutil entre bloques (opcional) */
+section + section,
+.card + .card {
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+
+/* 🔹 Eliminar márgenes verticales entre cuadros */
+.container,
+.page2,
+.footer-section,
+.comparativa {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* 🔹 Si quieres que queden completamente pegados sin separación */
+.comercial + .page2,
+.page2 + .footer-section,
+.footer-section + .comparativa {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+/* ✅ Ajuste final de separación entre cuadros (alineado visualmente) */
+.container,
+.page2,
+.footer-section,
+.comparativa,
+.comercial {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* 🔹 Evitar que las sombras o bordes se superpongan visualmente */
+.container,
+.comercial,
+.page2,
+.footer-section,
+.comparativa {
+  position: relative;
+  top: 0;
+}
+
+/* 🔹 Añadir un margen controlado de 5px entre bloques (ajustable) */
+.comercial {
+  margin-top: -5px !important; /* sube un poco el bloque comercial */
+}
+
+.page2 {
+  margin-top: -10px !important; /* acerca la tabla */
+}
+
+
+/* 🔹 Asegura que no haya “colisión visual” entre bordes redondeados */
+.container,
+.page2,
+.comercial,
+.footer-section,
+.comparativa {
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+}
+/* 🔹 Espacio interno dentro del bloque de servicios */
+.page2 {
+  padding-top: 30px !important; /* espacio blanco interno arriba */
+}
+
+/* 🔹 Evita que la tabla se pegue al borde superior */
+.page2 table {
+  margin-top: 25px !important; /* separa visualmente la tabla del borde */
+}
+
 
  </style>
 </head>
@@ -765,7 +858,7 @@ body::after {
     <div style="flex:1 1 200px;">
       <label style="color:#0c4a75; font-weight:bold;">Tipo de vía:</label>
       <select id="tipoVia" name="tipoVia" style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
-        <option value="">-- Selecciona tipo de vía --</option>
+        <option value="">Selecciona tipo de vía:</option>
         <option>Arroyo</option>
         <option>Avenida</option>
         <option>Barrio</option>
@@ -941,7 +1034,8 @@ body::after {
             <option value="21.62">TKL Movil Gb Ilimitados</option>
           </select>
         </td>
-        <td><input type="number" min="0" class="cantidad" placeholder="0"></td>
+        <td><input type="number" min="0" class="cantidad" placeholder=" "></td>
+
         <td><input type="number" min="0" step="0.01" class="coste" placeholder="0.00"></td>
         <td class="total">0.00</td>
       </tr>
@@ -1102,13 +1196,6 @@ body::after {
     const instalacion = document.getElementById("instalacion");
     const ivaInstalacion = document.getElementById("ivaInstalacion");
     const instalacionIVA = document.getElementById("instalacionIVA");
-// 🔹 Asegurar que la primera fila tenga cantidad 1 al cargar la página
-document.addEventListener("DOMContentLoaded", () => {
-  const primeraCantidad = document.querySelector("#tablaServicios tbody .cantidad");
-  if (primeraCantidad && (!primeraCantidad.value || primeraCantidad.value === "0")) {
-    primeraCantidad.value = 1;
-  }
-});
 
 
     instalacion.addEventListener("input", actualizarTotales);
@@ -1157,7 +1244,7 @@ document.getElementById("agregarPredefinido").addEventListener("click", () => {
         <option value="21.62">TKL Movil Gb Ilimitados</option>
       </select>
     </td>
-    <td><input type="number" min="0" class="cantidad" value="1"></td>
+    <td><input type="number" min="0" class="cantidad" placeholder=" "></td>
     <td><input type="number" min="0" step="0.01" class="coste" placeholder="0.00"></td>
     <td class="total">0.00</td>`;
   tabla.appendChild(fila);
@@ -1169,8 +1256,8 @@ document.getElementById("agregarPersonalizado").addEventListener("click", (e) =>
   const fila = document.createElement("tr");
   fila.innerHTML = `
     <td><input type="text" class="servicioPersonalizado" placeholder="Escribe el servicio..."></td>
-    <td><input type="number" min="0" class="cantidad" value="1"></td>
-    <td><input type="number" min="0" step="0.01" class="coste" placeholder="0.00"></td>
+   <td><input type="number" min="0" class="cantidad" placeholder=" "></td>
+   <td><input type="number" min="0" step="0.01" class="coste" placeholder="0.00"></td>
     <td class="total">0.00</td>`;
   tabla.appendChild(fila);
 });
@@ -1354,7 +1441,28 @@ $(document).ready(function() {
   observer.observe(document.querySelector("#tablaServicios tbody"), { childList: true });
 });
 // --- CONTROL DE BOTONES FINALES ---
-// --- CONTROL DE BOTONES FINALES ---
+// ✅ Verificar cantidades antes de enviar o cambiar de vista
+
+// ✅ Verificar cantidades antes de enviar o cambiar de vista (con validación HTML5)
+function verificarAntesDeAccion(e) {
+  let valido = true;
+
+  document.querySelectorAll(".cantidad").forEach(input => {
+    // limpiar cualquier mensaje anterior
+    input.setCustomValidity("");
+
+    // si está vacío o es <= 0 → marca el error
+    if (input.value.trim() === "" || parseFloat(input.value) <= 0) {
+      input.setCustomValidity("Por favor, introduce una cantidad válida");
+      input.reportValidity(); // muestra el mensaje de error sobre el campo
+      input.focus();
+      valido = false;
+    }
+  });
+
+  return valido;
+}
+
 const comentarios = document.getElementById("comentariosRevision");
 const btnRevisar = document.getElementById("revisarOferta");
 const btnRechazar = document.getElementById("rechazarOferta");
@@ -1370,12 +1478,18 @@ comentarios.addEventListener("input", () => {
 const isGithub = window.location.hostname.includes("github.io");
 const basePath = isGithub ? "/prueba/" : "./";
 
+// --- BOTONES FINALES CON VALIDACIÓN DE CANTIDADES ---
+
+// ✅ Aceptar oferta
 btnAceptar.addEventListener("click", (e) => {
+  if (!verificarAntesDeAccion(e)) return;  // Verifica antes de continuar
   e.preventDefault();
   window.location.href = `${basePath}resultado.html?estado=aceptada`;
 });
 
+// 🔍 Revisar oferta
 btnRevisar.addEventListener("click", (e) => {
+  if (!verificarAntesDeAccion(e)) return;  // Verifica antes de continuar
   e.preventDefault();
   const texto = comentarios.value.trim();
   if (texto) {
@@ -1383,10 +1497,13 @@ btnRevisar.addEventListener("click", (e) => {
   }
 });
 
+// ❌ Rechazar oferta
 btnRechazar.addEventListener("click", (e) => {
+  if (!verificarAntesDeAccion(e)) return;  // Verifica antes de continuar
   e.preventDefault();
   window.location.href = `${basePath}resultado.html?estado=rechazada`;
 });
+
 
 // NUEVO: vista cliente
 const btnVistaCliente = document.createElement("button");
@@ -1395,11 +1512,14 @@ btnVistaCliente.className = "btn-final azul";
 document.querySelector(".botones-finales").appendChild(btnVistaCliente);
 
 // --- GUARDAR OFERTA EN LOCALSTORAGE Y ABRIR VISTA CLIENTE ---
-btnVistaCliente.addEventListener("click", () => {
+btnVistaCliente.addEventListener("click", (e) => {
+  if (!verificarAntesDeAccion(e)) return;  // ⚠️ Verifica cantidades antes de continuar
+  e.preventDefault();
+
   // Crear objeto con los datos del formulario
   const datos = {
     fecha: document.getElementById("fechaOferta").value,
-    empresa: document.querySelector('input[placeholder="Escribe el nombre..."]')?.value || "",
+    empresa: document.getElementById("nombreEmpresa")?.value || "",
     comercial: {
       nombre: document.querySelector('.comercial-info input[placeholder="Escribe el nombre..."]')?.value || "",
       movil: document.querySelector('.comercial-info input[placeholder="Ej: 600 123 456"]')?.value || "",
@@ -1410,7 +1530,6 @@ btnVistaCliente.addEventListener("click", () => {
     totalMensualIVA: document.getElementById("mensualIVA")?.value || "",
     instalacionIVA: document.getElementById("instalacionIVA")?.value || "",
     mostrarComparativa: document.getElementById("mostrarComparativa").checked,
-
     servicios: []
   };
 
@@ -1424,58 +1543,38 @@ btnVistaCliente.addEventListener("click", () => {
     const coste = tr.querySelector(".coste")?.value || "";
     if (servicio) datos.servicios.push({ servicio, cantidad, coste });
   });
-  // ✅ Guardar datos de la comparativa de ahorro (si existe)
-const comparativaFilas = document.querySelectorAll("#tablaAhorro tbody tr");
-datos.comparativa = [];
 
-comparativaFilas.forEach(tr => {
-  const servicioActual = tr.querySelector("td:nth-child(1) input")?.value || "";
-  const gastoActual = tr.querySelector(".gastoActual")?.value || "";
-  const nuevoServicio = tr.querySelector("td:nth-child(3) input")?.value || "";
-  const nuevoGasto = tr.querySelector(".nuevoGasto")?.value || "";
+  // ✅ Guardar datos de la comparativa de ahorro
+  const comparativaFilas = document.querySelectorAll("#tablaAhorro tbody tr");
+  datos.comparativa = [];
 
-  if (servicioActual || nuevoServicio) {
-    datos.comparativa.push({
-      servicioActual,
-      gastoActual,
-      nuevoServicio,
-      nuevoGasto
-    });
-  }
-});
+  comparativaFilas.forEach(tr => {
+    const servicioActual = tr.querySelector("td:nth-child(1) input")?.value || "";
+    const gastoActual = tr.querySelector(".gastoActual")?.value || "";
+    const nuevoServicio = tr.querySelector("td:nth-child(3) input")?.value || "";
+    const nuevoGasto = tr.querySelector(".nuevoGasto")?.value || "";
 
-// ✅ Guardar totales de ahorro
-datos.ahorroMensual = document.getElementById("ahorroMensual")?.value || "";
-datos.ahorroAnual = document.getElementById("ahorroAnual")?.value || "";
-datos.porcentajeAhorro = document.getElementById("porcentajeAhorro")?.textContent || "";
+    if (servicioActual || nuevoServicio) {
+      datos.comparativa.push({
+        servicioActual,
+        gastoActual,
+        nuevoServicio,
+        nuevoGasto
+      });
+    }
+  });
 
+  // ✅ Guardar totales de ahorro
+  datos.ahorroMensual = document.getElementById("ahorroMensual")?.value || "";
+  datos.ahorroAnual = document.getElementById("ahorroAnual")?.value || "";
+  datos.porcentajeAhorro = document.getElementById("porcentajeAhorro")?.textContent || "";
 
-  // Guardar en localStorage
+  // Guardar en localStorage y abrir la vista cliente
   localStorage.setItem("ofertaTelekos", JSON.stringify(datos));
-
-  // Abrir versión cliente
   window.open("propuesta-cliente.html", "_blank");
 });
 
 
-function guardarOferta() {
-  const datos = {
-empresa: document.querySelector('input[placeholder="Nombre de la empresa..."]')?.value || "",
-    totalMensual: document.getElementById("mensualIVA")?.value,
-    fecha: document.getElementById("fechaOferta")?.value,
-    servicios: []
-  };
-
-  document.querySelectorAll("#tablaServicios tbody tr").forEach(tr => {
-    const servicio = tr.querySelector(".ssrvicioSelect")?.value ||
-                     tr.querySelector(".servicioPersonalizado")?.value;
-    const cantidad = tr.querySelector(".cantidad")?.value;
-    const coste = tr.querySelector(".coste")?.value;
-    if (servicio) datos.servicios.push({ servicio, cantidad, coste });
-  });
-
-  localStorage.setItem("ofertaTelekos", JSON.stringify(datos));
-}
 
 // 🔠 Convertir automáticamente a MAYÚSCULAS el campo "Nombre de la empresa"
 const campoNombreEmpresa = document.getElementById("nombreEmpresa");
@@ -1483,6 +1582,42 @@ if (campoNombreEmpresa) {
   campoNombreEmpresa.addEventListener("input", (e) => {
     e.target.value = e.target.value.toUpperCase();
   });
+}
+
+// 🚨 Validar que TODAS las cantidades estén rellenas antes de calcular
+function validarCantidades() {
+  let valido = true;
+
+  tabla.querySelectorAll(".cantidad").forEach(input => {
+    if (input.value.trim() === "" || parseFloat(input.value) <= 0) {
+      valido = false;
+      input.style.border = "2px solid #f58220"; // borde naranja de aviso
+      input.style.backgroundColor = "#fff4ec";  // fondo crema
+    } else {
+      input.style.border = "1px solid #cdd5df"; // normal
+      input.style.backgroundColor = "white";
+    }
+  });
+
+  return valido;
+}
+
+// 🚨 Si alguien borra una cantidad, la marca en naranja y no deja calcular
+function validarCantidades() {
+  let valido = true;
+
+  tabla.querySelectorAll(".cantidad").forEach(input => {
+    if (input.value.trim() === "" || parseFloat(input.value) <= 0) {
+      valido = false;
+      input.style.border = "2px solid #f58220";
+      input.style.backgroundColor = "#fff4ec";
+    } else {
+      input.style.border = "1px solid #cdd5df";
+      input.style.backgroundColor = "white";
+    }
+  });
+
+  return valido;
 }
 
 
