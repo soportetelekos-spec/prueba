@@ -146,7 +146,6 @@
     th { padding: 10px; border: 1px solid #cdd5df; text-align: center; font-weight: bold; }
     th:nth-child(1){background:#fff4ec;color:#f58220;} th:nth-child(2),th:nth-child(3){background:#e9f0fa;color:#0c4a75;} th:nth-child(4){background:#0c4a75;color:white;}
     td{border:1px solid #cdd5df;text-align:center;padding:6px;} td input{width:95%;border:none;border-bottom:1px solid #ccc;text-align:center;}
-    tfoot td{background:#f58220;color:white;font-weight:bold;padding:10px;text-align:right;}
 
     .botones{margin-top:20px;display:flex;justify-content:flex-end;gap:10px;}
     button{padding:8px 16px;border:none;border-radius:4px;font-weight:bold;color:white;cursor:pointer;}
@@ -701,6 +700,33 @@ body::after {
     height: 80px;
   }
 }
+/* --- Corrección de colores del pie de tabla --- */
+#tablaServicios tfoot td {
+  background: none;
+  border-top: 1px solid #cdd5df;
+}
+
+#totalPBX, #totalOtros, #totalGeneral {
+  font-weight: bold;
+  text-align: right;
+  padding: 6px 8px;
+  font-size: 0.9rem;
+}
+
+#totalPBX {
+  background: #e9f0fa;      /* azul muy claro */
+  color: #0c4a75;
+}
+
+#totalOtros {
+  background: #f0f0f0;      /* gris claro para contrastar */
+  color: #f58220;
+}
+
+#totalGeneral {
+  background: #0c4a75;      /* azul oscuro */
+  color: rgb(0, 0, 0);
+}
 
 
  </style>
@@ -728,15 +754,112 @@ body::after {
 </div>
 
         <h3><span style="color:#f58220;">PROPUESTA DE SERVICIO</h3>
-      <label>NOMBRE DE LA EMPRESA:</label>
-      <input type="text" placeholder="Nombre de la empresa...">
-        <label>ATENCIÓN DE:</label><input type="text" />
-       <label>DOMICILIO:</label><input type="text" />
-      <label>CP:</label><input type="text" style="width:100px;display:inline-block;">
-      <label>LOCALIDAD:</label><input type="text" />
-      <label>PROVINCIA:</label><input type="text" style="width:150px;">
+     <label>NOMBRE DE LA EMPRESA:</label>
+<input type="text" id="nombreEmpresa" >
+  
+      <!-- 🏠 DIRECCIÓN COMPLETA -->
+<div class="direccion-box" style="margin-top:20px; background:#f9fbfc; padding:15px; border:1px solid #dce3ea; border-radius:8px;">
+  <h4 style="color:#0c4a75; margin-bottom:10px;">Dirección del Cliente</h4>
 
-        <label>NIF/CIF/NIE:</label><input type="text" />
+  <div style="display:flex; gap:10px; flex-wrap:wrap;">
+    <div style="flex:1 1 200px;">
+      <label style="color:#0c4a75; font-weight:bold;">Tipo de vía:</label>
+      <select id="tipoVia" name="tipoVia" style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+        <option value="">-- Selecciona tipo de vía --</option>
+        <option>Arroyo</option>
+        <option>Avenida</option>
+        <option>Barrio</option>
+        <option>Bulevar</option>
+        <option>Calle</option>
+        <option>Callejón</option>
+        <option>Camino</option>
+        <option>Camino alto</option>
+        <option>Camino bajo</option>
+        <option>Camino viejo</option>
+        <option>Campillo</option>
+        <option>Carrera</option>
+        <option>Carretera</option>
+        <option>Cerrillo</option>
+        <option>Costanilla</option>
+        <option>Cuesta</option>
+        <option>Ensanche</option>
+        <option>Extrarradio</option>
+        <option>Glorieta</option>
+        <option>Interior</option>
+        <option>Pasadizo</option>
+        <option>Pasaje</option>
+        <option>Paseo</option>
+        <option>Paseo alto</option>
+        <option>Paseo bajo</option>
+        <option>Plaza</option>
+        <option>Pradera</option>
+        <option>Pretíl</option>
+        <option>Puente</option>
+        <option>Punto kilométrico</option>
+        <option>Rambla</option>
+        <option>Ribera</option>
+        <option>Ronda</option>
+        <option>Street</option>
+        <option>Travesía</option>
+        <option>Vereda</option>
+      </select>
+    </div>
+
+    <div style="flex:2 1 300px;">
+      <label style="color:#0c4a75; font-weight:bold;">Nombre de la Calle:</label>
+      <input type="text" id="nombreVia"  style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+    </div>
+
+    <div style="flex:0.5 1 100px;">
+      <label style="color:#0c4a75; font-weight:bold;">Nº:</label>
+      <input type="text" id="numero"  style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+    </div>
+
+    <div style="flex:0.5 1 100px;">
+      <label style="color:#0c4a75; font-weight:bold;">Piso:</label>
+      <input type="text" id="piso"  style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+    </div>
+
+    <div style="flex:0.5 1 120px;">
+      <label style="color:#0c4a75; font-weight:bold;">Puerta:</label>
+      <input type="text" id="puerta"  style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+    </div>
+
+    <div style="flex:0.5 1 120px;">
+      <label style="color:#0c4a75; font-weight:bold;">Bloque:</label>
+      <input type="text" id="bloque"  style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+    </div>
+
+    <div style="flex:0.5 1 120px;">
+      <label style="color:#0c4a75; font-weight:bold;">Escalera:</label>
+      <input type="text" id="escalera"  style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+    </div>
+
+    <div style="flex:1 1 200px;">
+      <label style="color:#0c4a75; font-weight:bold;">Municipio:</label>
+      <input type="text" id="municipio"  style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+    </div>
+
+    <div style="flex:1 1 150px;">
+      <label style="color:#0c4a75; font-weight:bold;">Provincia:</label>
+      <input type="text" id="provincia"  style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+    </div>
+
+    <div style="flex:1 1 150px;">
+      <label style="color:#0c4a75; font-weight:bold;">C.P.:</label>
+      <input type="text" id="codigoPostal" style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+    </div>
+
+    <div style="flex:1 1 150px;">
+      <label style="color:#0c4a75; font-weight:bold;">CCAA:</label>
+      <input type="text" id="ccaa"  style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+    </div>
+  </div>
+
+  
+</div>
+
+       <label>NIF/CIF/NIE:</label><input type="text" />
         <label>TELÉFONO:</label><input type="text" />
         <label>EMAIL:</label><input type="email" />
       </div>
@@ -779,6 +902,7 @@ body::after {
       </tr>
     </thead>
     <tbody>
+      
       <tr>
         <td>
           <select class="servicioSelect">
@@ -823,11 +947,26 @@ body::after {
       </tr>
     </tbody>
     <tfoot>
-      <tr>
-        <td colspan="3" style="text-align:right;">TOTAL GENERAL (€)</td>
-        <td id="totalGeneral">0.00</td>
-      </tr>
-    </tfoot>
+  <tr>
+    <td colspan="3" style="text-align:right; color:#0c4a75; font-weight:bold;">
+      TOTAL CENTRALITA (PBX) (€)
+    </td>
+    <td id="totalPBX">0.00</td>
+  </tr>
+  <tr>
+    <td colspan="3" style="text-align:right; color:#f58220; font-weight:bold;">
+      TOTAL OTROS SERVICIOS (€)
+    </td>
+    <td id="totalOtros">0.00</td>
+  </tr>
+  <tr>
+    <td colspan="3" style="text-align:right; font-weight:bold;">
+      TOTAL GENERAL (€)
+    </td>
+    <td id="totalGeneral">0.00</td>
+  </tr>
+</tfoot>
+
   </table>
 
   <div class="botones">
@@ -963,6 +1102,13 @@ body::after {
     const instalacion = document.getElementById("instalacion");
     const ivaInstalacion = document.getElementById("ivaInstalacion");
     const instalacionIVA = document.getElementById("instalacionIVA");
+// 🔹 Asegurar que la primera fila tenga cantidad 1 al cargar la página
+document.addEventListener("DOMContentLoaded", () => {
+  const primeraCantidad = document.querySelector("#tablaServicios tbody .cantidad");
+  if (primeraCantidad && (!primeraCantidad.value || primeraCantidad.value === "0")) {
+    primeraCantidad.value = 1;
+  }
+});
 
 
     instalacion.addEventListener("input", actualizarTotales);
@@ -970,7 +1116,7 @@ body::after {
       if (e.target.classList.contains("cantidad") || e.target.classList.contains("coste")) actualizarTotales();
     });
 
-  // --- BOTÓN: AGREGAR SERVICIO PREDEFINIDO ---
+// --- BOTÓN: AGREGAR SERVICIO PREDEFINIDO ---
 document.getElementById("agregarPredefinido").addEventListener("click", () => {
   const fila = document.createElement("tr");
   fila.innerHTML = `
@@ -1011,7 +1157,7 @@ document.getElementById("agregarPredefinido").addEventListener("click", () => {
         <option value="21.62">TKL Movil Gb Ilimitados</option>
       </select>
     </td>
-    <td><input type="number" min="0" class="cantidad" placeholder="0"></td>
+    <td><input type="number" min="0" class="cantidad" value="1"></td>
     <td><input type="number" min="0" step="0.01" class="coste" placeholder="0.00"></td>
     <td class="total">0.00</td>`;
   tabla.appendChild(fila);
@@ -1023,7 +1169,7 @@ document.getElementById("agregarPersonalizado").addEventListener("click", (e) =>
   const fila = document.createElement("tr");
   fila.innerHTML = `
     <td><input type="text" class="servicioPersonalizado" placeholder="Escribe el servicio..."></td>
-    <td><input type="number" min="0" class="cantidad" placeholder="0"></td>
+    <td><input type="number" min="0" class="cantidad" value="1"></td>
     <td><input type="number" min="0" step="0.01" class="coste" placeholder="0.00"></td>
     <td class="total">0.00</td>`;
   tabla.appendChild(fila);
@@ -1057,22 +1203,53 @@ tabla.addEventListener("input", e => {
 });
 
 // --- FUNCIÓN PRINCIPAL DE CÁLCULOS ---
+// --- FUNCIÓN PRINCIPAL DE CÁLCULOS (MEJORADA CON SUBTOTALES) ---
 function actualizarTotales() {
   let totalGeneral = 0;
+  let totalPBX = 0;
+  let totalOtros = 0;
+
+  // Palabras clave que identifican servicios de centralita (PBX)
+  const pbxKeywords = [
+    "numeracion", "numeraciones", "extensiones", "canal", "canales",
+    "hardware", "software",
+    "tp 100 nac", "tp 200 nac", "tp 500 nac", "tp 1000 nac", "tp 2000 nac"
+  ];
 
   tabla.querySelectorAll("tr").forEach(fila => {
+    const servicioTexto =
+      fila.querySelector(".servicioSelect")?.selectedOptions[0]?.text?.toLowerCase() ||
+      fila.querySelector(".servicioPersonalizado")?.value?.toLowerCase() ||
+      "";
+
     const cantidad = parseFloat(fila.querySelector(".cantidad")?.value) || 0;
     const coste = parseFloat(fila.querySelector(".coste")?.value) || 0;
     const total = cantidad * coste;
 
+    // Muestra el total de cada fila
     fila.querySelector(".total").textContent = total.toFixed(2);
+
+    // Suma al total general
     totalGeneral += total;
+
+    // Clasifica según el tipo de servicio
+    if (pbxKeywords.some(keyword => servicioTexto.includes(keyword))) {
+      totalPBX += total;
+    } else {
+      totalOtros += total;
+    }
   });
 
-  // actualizar totales generales
-  totalGeneralEl.textContent = totalGeneral.toFixed(2);
-  costeMensual.value = totalGeneral.toFixed(2);
+  // 🧮 Actualizar los totales en pantalla
+  const totalPBXEl = document.getElementById("totalPBX");
+  const totalOtrosEl = document.getElementById("totalOtros");
 
+  if (totalPBXEl) totalPBXEl.textContent = totalPBX.toFixed(2);
+  if (totalOtrosEl) totalOtrosEl.textContent = totalOtros.toFixed(2);
+  totalGeneralEl.textContent = totalGeneral.toFixed(2);
+
+  // 🧾 Calcular IVA y totales
+  costeMensual.value = totalGeneral.toFixed(2);
   const iva = totalGeneral * 0.21;
   ivaMensual.value = iva.toFixed(2);
   mensualIVA.value = (totalGeneral + iva).toFixed(2);
@@ -1081,6 +1258,7 @@ function actualizarTotales() {
   ivaInstalacion.value = (inst * 0.21).toFixed(2);
   instalacionIVA.value = (inst * 1.21).toFixed(2);
 }
+
 
 // --- MOSTRAR CAMPO PERSONALIZADO SI SE ELIGE OPCIÓN MANUAL ---
 tabla.addEventListener("change", e => {
@@ -1298,6 +1476,15 @@ empresa: document.querySelector('input[placeholder="Nombre de la empresa..."]')?
 
   localStorage.setItem("ofertaTelekos", JSON.stringify(datos));
 }
+
+// 🔠 Convertir automáticamente a MAYÚSCULAS el campo "Nombre de la empresa"
+const campoNombreEmpresa = document.getElementById("nombreEmpresa");
+if (campoNombreEmpresa) {
+  campoNombreEmpresa.addEventListener("input", (e) => {
+    e.target.value = e.target.value.toUpperCase();
+  });
+}
+
 
 
   </script>
