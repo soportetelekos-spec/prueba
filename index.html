@@ -1451,20 +1451,33 @@ $(document).ready(function() {
 // --- CONTROL DE BOTONES FINALES ---
 // ✅ Verificar cantidades antes de enviar o cambiar de vista
 
-// ✅ Verificar cantidades antes de enviar o cambiar de vista (con validación HTML5)
 function verificarAntesDeAccion(e) {
   let valido = true;
 
-  document.querySelectorAll(".cantidad").forEach(input => {
-    // limpiar cualquier mensaje anterior
-    input.setCustomValidity("");
+  document.querySelectorAll("#tablaServicios tbody tr").forEach(fila => {
+    const select = fila.querySelector(".servicioSelect");
+    const personalizado = fila.querySelector(".servicioPersonalizado");
+    const cantidad = fila.querySelector(".cantidad");
 
-    // si está vacío o es <= 0 → marca el error
-    if (input.value.trim() === "" || parseFloat(input.value) <= 0) {
-      input.setCustomValidity("Por favor, introduce una cantidad válida");
-      input.reportValidity(); // muestra el mensaje de error sobre el campo
-      input.focus();
-      valido = false;
+    // limpiar cualquier mensaje anterior
+    cantidad.setCustomValidity("");
+
+    // detectar si hay un servicio seleccionado o escrito
+    const tieneServicio =
+      (select && select.value !== "") ||
+      (personalizado && personalizado.value.trim() !== "");
+
+    // ✅ Solo validar cantidad si hay servicio elegido
+    if (tieneServicio) {
+      if (cantidad.value.trim() === "" || parseFloat(cantidad.value) <= 0) {
+        cantidad.setCustomValidity("Por favor, introduce una cantidad válida");
+        cantidad.reportValidity();
+        cantidad.focus();
+        valido = false;
+      }
+    } else {
+      // si no hay servicio, no se valida nada
+      cantidad.setCustomValidity("");
     }
   });
 
@@ -1475,6 +1488,7 @@ const comentarios = document.getElementById("comentariosRevision");
 const btnRevisar = document.getElementById("revisarOferta");
 const btnRechazar = document.getElementById("rechazarOferta");
 const btnAceptar = document.getElementById("aceptarOferta");
+
 
 // Solo habilitar "Revisar" si hay texto
 comentarios.addEventListener("input", () => {
