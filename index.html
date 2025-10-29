@@ -1276,10 +1276,18 @@ document.getElementById("eliminarFila").addEventListener("click", (e) => {
 $(document).on('select2:select', '.servicioSelect', function (e) {
   const fila = this.closest("tr");
   const costeInput = fila.querySelector(".coste");
+  const cantidadInput = fila.querySelector(".cantidad"); // ✅ nuevo
+
   const valor = parseFloat(this.value) || 0;
   costeInput.value = valor.toFixed(2);
   actualizarTotales();
+
+  // ✅ Al seleccionar un servicio, enfoca automáticamente la cantidad
+  if (cantidadInput) {
+    cantidadInput.focus();
+  }
 });
+
 
 
 // --- ACTUALIZAR TOTAL AL CAMBIAR CANTIDAD O COSTE ---
