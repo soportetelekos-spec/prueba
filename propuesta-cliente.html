@@ -10,26 +10,40 @@
       margin: 0;
       padding: 0;
     }
-    .cabecera {
-      text-align: center;
-      background: #fff;
-      padding: 20px 0;
-      border-bottom: 3px solid #116cad;
-    }
-    .cabecera img {
-      max-width: 950px;
-      width: 1000%;
-      height: auto;
-      border-radius: 8px;
-    }
-    .oferta {
-      max-width: 950px;
-      margin: 40px auto;
-      background: #fff;
-      padding: 40px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
+   
+.cabecera {
+  background: #fff;
+  border-bottom: 3px solid #116cad;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+.cabecera img {
+  display: block;
+  width: 100%;
+  max-width: 950px;      /* igual que el ancho del contenido */
+  height: auto;
+  border-radius: 10px 10px 0 0;
+  box-sizing: border-box; /* evita desbordamientos */
+  object-fit: contain;
+
+}
+
+.oferta {
+  width: 100%;
+  max-width: 950px;       /* mismo ancho que la cabecera */
+  margin: 0 auto;         /* centra el bloque */
+  background: #fff;
+  padding: 40px;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-sizing: border-box; /* asegura que no se salga del ancho */
+}
+
+
+
     h1 { color: #0c4a75; margin-top: 0; }
 
     h2 {
@@ -78,6 +92,31 @@
       border-radius: 8px;
       margin-top: 20px;
     }
+
+    /* ✅ Estilo del botón de descarga */
+#btnDescargar {
+  background-color: #116cad;
+  color: #fff;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+#btnDescargar:hover {
+  background-color: #0c4a75;
+}
+
+/* 🖨️ Ocultar botón al imprimir o guardar PDF */
+@media print {
+  #btnDescargar {
+    display: none !important;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -262,5 +301,18 @@
       document.body.innerHTML = "<h2 style='text-align:center;color:#b82319'>⚠️ No hay datos de oferta cargados</h2>";
     }
   </script>
+<!-- 🟢 BOTÓN DESCARGAR PDF -->
+<div style="text-align:center; margin: 30px 0;">
+  <button id="btnDescargar">📄 Descargar Propuesta en PDF</button>
+</div>
+
+<script>
+  // 🟢 Botón Descargar → abrir diálogo de imprimir/guardar PDF
+  document.getElementById("btnDescargar").addEventListener("click", function() {
+    window.print();
+  });
+</script>
+
+
 </body>
 </html>
