@@ -8,106 +8,256 @@
       font-family: 'Segoe UI', Arial, sans-serif;
       background: #f4f6f8;
       margin: 0;
-      padding: 40px;
+      padding: 0;
+    }
+    .cabecera {
+      text-align: center;
+      background: #fff;
+      padding: 20px 0;
+      border-bottom: 3px solid #116cad;
+    }
+    .cabecera img {
+      max-width: 950px;
+      width: 1000%;
+      height: auto;
+      border-radius: 8px;
     }
     .oferta {
-      max-width: 800px;
-      margin: auto;
+      max-width: 950px;
+      margin: 40px auto;
       background: #fff;
       padding: 40px;
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    h1 { color: #0c4a75; }
-    h2 { color: #f58220; border-bottom: 2px solid #f58220; padding-bottom: 5px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #dce3ea; padding: 10px; text-align: center; }
-    th { background: #f9fbfc; color: #0c4a75; }
-    .totales {
-      background: #0c4a75;
+    h1 { color: #0c4a75; margin-top: 0; }
+
+    h2 {
+         color: #f58220;
+         border-bottom: 2px solid #f58220;
+         padding-bottom: 5px;
+    }
+
+    h3 {
+      background: #f58220;
       color: #fff;
+      padding: 8px 10px;
+      border-radius: 6px;
+      margin-top: 30px;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      border: 2px solid #f58220;
+    }
+    th, td {
+      border: 1px solid #dce3ea;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background: #f9fbfc;
+      color: #0c4a75;
+    }
+    tr.total-row {
+      background: #f2f6ff;
+      font-weight: bold;
+      color: #0c4a75;
+    }
+    .general-total {
+      background: #dfefff;
       font-weight: bold;
       font-size: 18px;
-      padding: 15px;
-      text-align: right;
-      border-radius: 6px;
-      margin-top: 25px;
-    }
-    .observaciones {
-      margin-top: 25px;
-      background: #fffaf7;
-      border-left: 4px solid #f58220;
-      padding: 15px;
-      color: #444;
-      border-radius: 6px;
-    }
-    .comercial {
-      margin-top: 30px;
-      border-top: 2px solid #dce3ea;
-      padding-top: 20px;
       color: #0c4a75;
+      text-align: right;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
+
+  <!-- 🟠 CABECERA -->
+  <div class="cabecera">
+    <img src="cabezera.png" alt="Cabecera Telekos">
+  </div>
+
   <div class="oferta">
     <h1>Propuesta Comercial</h1>
     <p><strong>Fecha:</strong> <span id="fecha"></span></p>
     <p><strong>Empresa:</strong> <span id="empresa"></span></p>
 
     <h2>Servicios incluidos</h2>
-    <table id="tablaServiciosCliente">
+
+    <!-- 🟠 TABLA PBX -->
+    <h3>PACK PBX (CENTRALITA)</h3>
+    <table id="tablaPBX">
       <thead>
         <tr>
           <th>Servicio</th>
           <th>Cantidad</th>
+          <th>Coste Unitario</th>
+          <th>Total</th>
         </tr>
       </thead>
       <tbody></tbody>
+      <tfoot>
+        <tr class="total-row">
+          <td colspan="3" style="text-align:right;">TOTAL PBX</td>
+          <td id="totalPBX">0.00€</td>
+        </tr>
+      </tfoot>
     </table>
 
-    <div class="totales">
-      <p>Total mensual (IVA incluido): <span id="totalMensual"></span> €</p>
-      <p>Coste de instalación (IVA incluido): <span id="instalacion"></span> €</p>
-    </div>
+    <!-- 🟣 TABLA OTROS SERVICIOS -->
+    <h3>OTROS SERVICIOS</h3>
+    <table id="tablaOtros">
+      <thead>
+        <tr>
+          <th>Servicio</th>
+          <th>Cantidad</th>
+          <th>Coste Unitario</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      <tfoot>
+        <tr class="total-row">
+          <td colspan="3" style="text-align:right;">TOTAL OTROS SERVICIOS</td>
+          <td id="totalOtros">0.00€</td>
+        </tr>
+      </tfoot>
+    </table>
 
-    <div class="observaciones">
-      <strong>Observaciones:</strong>
-      <p id="observaciones"></p>
+    <!-- 🟢 TOTAL GENERAL -->
+    <div class="general-total">
+      TOTAL GENERAL: <span id="totalGeneral">0.00€</span>
     </div>
+    <!-- 🔸 COMPARATIVA DE AHORRO (solo visible si el comercial la activó) -->
+<div id="comparativaCliente" style="display:none; margin-top:40px;">
+  <h2>Comparativa de Ahorro</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Servicio Actual</th>
+        <th>Gasto Actual (€)</th>
+        <th>Nuevo Servicio</th>
+        <th>Nuevo Gasto (€)</th>
+      </tr>
+    </thead>
+    <tbody id="tablaComparativa">
+      <tr>
+        <td colspan="4" style="text-align:center;color:#777;">
+          (Comparativa no incluida en esta propuesta)
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-    <div class="comercial">
-      <h3>Su comercial</h3>
-      <p><strong>Nombre:</strong> <span id="nombreComercial"></span></p>
-      <p><strong>Móvil:</strong> <span id="movilComercial"></span></p>
-      <p><strong>Teléfono fijo:</strong> <span id="fijoComercial"></span></p>
-      <p><strong>Email:</strong> <span id="emailComercial"></span></p>
-    </div>
   </div>
 
   <script>
     const datos = JSON.parse(localStorage.getItem("ofertaTelekos"));
 
     if (datos) {
+    // Mostrar u ocultar la comparativa según la configuración del comercial
+    if (datos.mostrarComparativa) {
+      document.getElementById("comparativaCliente").style.display = "block";
+        // Si hay datos de comparativa, mostrarlos en la tabla
+  if (Array.isArray(datos.comparativa) && datos.comparativa.length > 0) {
+    const tbodyComp = document.getElementById("tablaComparativa");
+    tbodyComp.innerHTML = ""; // limpiar contenido previo
+
+    datos.comparativa.forEach(c => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${c.servicioActual || ""}</td>
+        <td>${c.gastoActual ? parseFloat(c.gastoActual).toFixed(2) + "€" : ""}</td>
+        <td>${c.nuevoServicio || ""}</td>
+        <td>${c.nuevoGasto ? parseFloat(c.nuevoGasto).toFixed(2) + "€" : ""}</td>
+      `;
+      tbodyComp.appendChild(tr);
+    });
+
+    // Agregar fila de totales si existen
+    if (datos.ahorroMensual || datos.ahorroAnual) {
+      const trTotales = document.createElement("tr");
+      trTotales.style.background = "#f9fbfc";
+      trTotales.innerHTML = `
+        <td colspan="4" style="text-align:right; font-weight:bold; color:#0c4a75;">
+          Ahorro mensual: ${datos.ahorroMensual || "0.00"}€ |
+          Ahorro anual: ${datos.ahorroAnual || "0.00"}€ |
+          ${datos.porcentajeAhorro || "0%"} de ahorro
+        </td>
+      `;
+      tbodyComp.appendChild(trTotales);
+    }
+  }
+
+    } else {
+      document.getElementById("comparativaCliente").style.display = "none";
+    }
+
+
       document.getElementById("fecha").textContent = datos.fecha || "";
       document.getElementById("empresa").textContent = datos.empresa || "";
-      document.getElementById("totalMensual").textContent = datos.totalMensualIVA || "0.00";
-      document.getElementById("instalacion").textContent = datos.instalacionIVA || "0.00";
-      document.getElementById("observaciones").textContent = datos.observaciones || "";
 
-      // Comercial
-      document.getElementById("nombreComercial").textContent = datos.comercial?.nombre || "";
-      document.getElementById("movilComercial").textContent = datos.comercial?.movil || "";
-      document.getElementById("fijoComercial").textContent = datos.comercial?.fijo || "";
-      document.getElementById("emailComercial").textContent = datos.comercial?.email || "";
+      const tbodyPBX = document.querySelector("#tablaPBX tbody");
+      const tbodyOtros = document.querySelector("#tablaOtros tbody");
 
-      // Servicios
-      const tbody = document.querySelector("#tablaServiciosCliente tbody");
+      let totalPBX = 0;
+      let totalOtros = 0;
+
+      const pbxKeywords = [
+        "numeracion", "numeraciones", "extensiones", "canal", "canales",
+        "hardware", "software",
+        "tp 100 nac", "tp 200 nac", "tp 500 nac", "tp 1000 nac", "tp 2000 nac"
+      ];
+
       datos.servicios.forEach(s => {
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${s.servicio}</td><td>${s.cantidad}</td>`;
-        tbody.appendChild(tr);
+
+        const esPBX = pbxKeywords.some(p => s.servicio.toLowerCase().includes(p));
+        const cantidad = parseFloat(s.cantidad || 0) || 0;
+        const costeUnitario = parseFloat(s.coste || s.costeMensual || 0) || 0;
+
+        let totalServicio = parseFloat(s.total || 0);
+        if ((!totalServicio || totalServicio === 0) && cantidad && costeUnitario) {
+          totalServicio = cantidad * costeUnitario;
+        }
+
+        if (esPBX) {
+          totalPBX += totalServicio;
+          tr.innerHTML = `
+            <td>${s.servicio}</td>
+            <td>${cantidad || ""}</td>
+            <td>—</td>
+            <td>—</td>
+          `;
+          tbodyPBX.appendChild(tr);
+        } else {
+          totalOtros += totalServicio;
+          tr.innerHTML = `
+            <td>${s.servicio}</td>
+            <td>${cantidad || ""}</td>
+            <td>${costeUnitario ? costeUnitario.toFixed(2) + "€" : "—"}</td>
+            <td>${totalServicio.toFixed(2)}€</td>
+          `;
+          tbodyOtros.appendChild(tr);
+        }
       });
+
+      // Totales
+      document.getElementById("totalPBX").textContent = totalPBX.toFixed(2) + "€";
+      document.getElementById("totalOtros").textContent = totalOtros.toFixed(2) + "€";
+      document.getElementById("totalGeneral").textContent = (totalPBX + totalOtros).toFixed(2) + "€";
+
     } else {
       document.body.innerHTML = "<h2 style='text-align:center;color:#b82319'>⚠️ No hay datos de oferta cargados</h2>";
     }
