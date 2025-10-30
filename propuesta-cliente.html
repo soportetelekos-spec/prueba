@@ -4,315 +4,412 @@
   <meta charset="UTF-8">
   <title>Propuesta Cliente - Telekos</title>
   <style>
+    :root {
+      --fondo: #f4f6f8;
+      --texto: #0c4a75;
+      --primario: #116cad;
+      --secundario: #f58220;
+      --panel: #fff;
+      --sombra: rgba(0, 0, 0, 0.1);
+      --total-fondo: #f2f6ff;
+      --total-texto: #0c4a75;
+      --total-general-fondo: #dfefff;
+    }
+
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
-      background: #f4f6f8;
+      background: var(--fondo);
+      color: var(--texto);
       margin: 0;
       padding: 0;
-    }
-   
-.cabecera {
-  background: #fff;
-  border-bottom: 3px solid #116cad;
-  display: flex;
-  justify-content: center;
-  margin: 0;
-  padding: 0;
-}
-
-.cabecera img {
-  display: block;
-  width: 100%;
-  max-width: 950px;      /* igual que el ancho del contenido */
-  height: auto;
-  border-radius: 10px 10px 0 0;
-  box-sizing: border-box; /* evita desbordamientos */
-  object-fit: contain;
-
-}
-
-.oferta {
-  width: 100%;
-  max-width: 950px;       /* mismo ancho que la cabecera */
-  margin: 0 auto;         /* centra el bloque */
-  background: #fff;
-  padding: 40px;
-  border-radius: 0 0 10px 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  box-sizing: border-box; /* asegura que no se salga del ancho */
-}
-
-
-
-    h1 { color: #0c4a75; margin-top: 0; }
-
-    h2 {
-         color: #f58220;
-         border-bottom: 2px solid #f58220;
-         padding-bottom: 5px;
+      transition: background 0.4s ease, color 0.4s ease;
     }
 
+    /* CABECERA */
+    .cabecera {
+      background: var(--panel);
+      border-bottom: 3px solid var(--primario);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      position: relative;
+    }
+
+    .cabecera img {
+      width: 950px;
+      height: auto;
+      border-radius: 10px 10px 0 0;
+      object-fit: contain;
+    }
+
+    /* SWITCH MODO OSCURO */
+    .switch-container {
+      position: absolute;
+      right: 30px;
+      top: 25px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .switch-label {
+      font-size: 14px;
+      color: var(--texto);
+      font-weight: 600;
+    }
+
+    .switch {
+      position: relative;
+      width: 52px;
+      height: 30px;
+    }
+
+    .switch input { opacity: 0; width: 0; height: 0; }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: #ccc;
+      border-radius: 34px;
+      transition: .4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      border-radius: 50%;
+      transition: .4s;
+    }
+
+    input:checked + .slider {
+      background-color: #3b82f6;
+      box-shadow: 0 0 10px rgba(59,130,246,0.4);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+
+    /* CONTENIDO */
+    .oferta {
+      width: 950px;
+      background: var(--panel);
+      margin: 0 auto;
+      padding: 40px;
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 4px 12px var(--sombra);
+      box-sizing: border-box;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    h1 { color: var(--texto); margin-top: 0; }
+    h2 { color: var(--secundario); border-bottom: 2px solid var(--secundario); padding-bottom: 5px; }
     h3 {
-      background: #f58220;
+      background: var(--secundario);
       color: #fff;
       padding: 8px 10px;
       border-radius: 6px;
       margin-top: 30px;
       font-size: 16px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 10px;
-      border: 2px solid #f58220;
+      border: 2px solid var(--secundario);
     }
+
     th, td {
       border: 1px solid #dce3ea;
       padding: 10px;
       text-align: center;
     }
-    th {
-      background: #f9fbfc;
-      color: #0c4a75;
-    }
+
+    th { background: #f9fbfc; color: var(--texto); }
+
     tr.total-row {
-      background: #f2f6ff;
+      background: var(--total-fondo);
       font-weight: bold;
-      color: #0c4a75;
+      color: var(--total-texto);
     }
+
     .general-total {
-      background: #dfefff;
+      background: var(--total-general-fondo);
       font-weight: bold;
       font-size: 18px;
-      color: #0c4a75;
+      color: var(--texto);
       text-align: right;
       padding: 15px;
       border-radius: 8px;
       margin-top: 20px;
+      border: 1px solid transparent;
     }
 
-    /* ✅ Estilo del botón de descarga */
-#btnDescargar {
-  background-color: #116cad;
-  color: #fff;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: bold;
-  transition: background 0.2s ease;
-}
+    /* PANEL DE REVISIÓN */
+    .panel-derecho {
+      width: 950px;
+      background: var(--panel);
+      margin: 30px auto 0 auto;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px var(--sombra);
+      box-sizing: border-box;
+    }
 
-#btnDescargar:hover {
-  background-color: #0c4a75;
-}
+    .panel-derecho h2 {
+      color: var(--texto);
+      border-bottom: 2px solid var(--secundario);
+      padding-bottom: 5px;
+      text-align: center;
+    }
 
-/* 🖨️ Ocultar botón al imprimir o guardar PDF */
-@media print {
-  #btnDescargar {
-    display: none !important;
-  }
-}
+    .panel-derecho textarea {
+      width: 100%;
+      height: 200px;
+      resize: none;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 14px;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+      box-sizing: border-box;
+    }
 
+    /* BOTONES */
+    .contenedor-botones {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 40px auto 60px auto;
+    }
+
+    .contenedor-botones button {
+      background-color: var(--primario);
+      color: #fff;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+      transition: background 0.2s ease, box-shadow 0.2s;
+    }
+
+    .contenedor-botones button:hover:not(:disabled) {
+      background-color: #0c4a75;
+      box-shadow: 0 0 10px var(--primario);
+    }
+
+    #btnAceptar { background: #4CAF50; }
+    #btnAceptar:disabled { background: #a8d5a8; cursor: not-allowed; }
+    #btnRevisar { background: #3b82f6; }
+    #btnRevisar:disabled { background: #93c5fd; cursor: not-allowed; }
+    #btnRechazar { background: #d9534f; }
+
+    /* RESULTADO */
+    .resultado {
+      display: none;
+      background: var(--panel);
+      width: 700px;
+      margin: 120px auto;
+      padding: 50px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px var(--sombra);
+      text-align: center;
+    }
+
+    .aceptada { color: #28a745; }
+    .revisar { color: #3b82f6; }
+    .rechazada { color: #d9534f; }
+
+    #volver {
+      margin-top: 30px;
+      background: var(--primario);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    #volver:hover { background: #0c4a75; }
+
+    /* 🌙 MODO OSCURO AZUL ELEGANTE */
+    body.dark {
+      --fondo: #1e293b;
+      --panel: #2b3648;
+      --texto: #dbeafe;
+      --primario: #2563eb;
+      --secundario: #3b82f6;
+      --sombra: rgba(0, 0, 0, 0.3);
+      --total-fondo: #334155;
+      --total-texto: #93c5fd;
+      --total-general-fondo: #1e293b;
+    }
+
+    body.dark .general-total {
+      border: 1px solid #3b82f6;
+    }
+
+    body.dark th {
+      background: #3b4b5f;
+      color: #dbeafe;
+    }
+
+    body.dark td {
+      border-color: #475569;
+      color: #e2e8f0;
+    }
+
+    body.dark .panel-derecho textarea {
+      background: #3b4b5f;
+      color: #fff;
+      border-color: #64748b;
+    }
+
+    body.dark h3 {
+      background: #2563eb;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
 
-  <!-- 🟠 CABECERA -->
+  <!-- CABECERA -->
   <div class="cabecera">
     <img src="cabezera.png" alt="Cabecera Telekos">
+
+    <div class="switch-container">
+      <span class="switch-label">Modo oscuro</span>
+      <label class="switch">
+        <input type="checkbox" id="modoOscuro">
+        <span class="slider"></span>
+      </label>
+    </div>
   </div>
 
-  <div class="oferta">
-    <h1>Propuesta Comercial</h1>
-    <p><strong>Fecha:</strong> <span id="fecha"></span></p>
-    <p><strong>Empresa:</strong> <span id="empresa"></span></p>
+  <!-- CONTENIDO PRINCIPAL -->
+  <div id="pantallaPropuesta">
+    <div class="oferta">
+      <h1>Propuesta Comercial</h1>
+      <p><strong>Fecha:</strong> <span>30/10/2025</span></p>
+      <p><strong>Empresa:</strong> <span>Cliente Ejemplo S.L.</span></p>
 
-    <h2>Servicios incluidos</h2>
+      <h2>Servicios incluidos</h2>
+      <h3>PACK PBX (CENTRALITA)</h3>
+      <table>
+        <thead><tr><th>Servicio</th><th>Cantidad</th><th>Coste Unitario</th><th>Total</th></tr></thead>
+        <tbody><tr><td>Extensiones</td><td>5</td><td>5.00€</td><td>25.00€</td></tr></tbody>
+        <tfoot><tr class="total-row"><td colspan="3">TOTAL PBX</td><td>25.00€</td></tr></tfoot>
+      </table>
 
-    <!-- 🟠 TABLA PBX -->
-    <h3>PACK PBX (CENTRALITA)</h3>
-    <table id="tablaPBX">
-      <thead>
-        <tr>
-          <th>Servicio</th>
-          <th>Cantidad</th>
-          <th>Coste Unitario</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-      <tfoot>
-        <tr class="total-row">
-          <td colspan="3" style="text-align:right;">TOTAL PBX</td>
-          <td id="totalPBX">0.00€</td>
-        </tr>
-      </tfoot>
-    </table>
+      <h3>OTROS SERVICIOS</h3>
+      <table>
+        <thead><tr><th>Servicio</th><th>Cantidad</th><th>Coste Unitario</th><th>Total</th></tr></thead>
+        <tbody><tr><td>TKM Fibra Plus</td><td>1</td><td>44.00€</td><td>44.00€</td></tr></tbody>
+        <tfoot><tr class="total-row"><td colspan="3">TOTAL OTROS</td><td>44.00€</td></tr></tfoot>
+      </table>
 
-    <!-- 🟣 TABLA OTROS SERVICIOS -->
-    <h3>OTROS SERVICIOS</h3>
-    <table id="tablaOtros">
-      <thead>
-        <tr>
-          <th>Servicio</th>
-          <th>Cantidad</th>
-          <th>Coste Unitario</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-      <tfoot>
-        <tr class="total-row">
-          <td colspan="3" style="text-align:right;">TOTAL OTROS SERVICIOS</td>
-          <td id="totalOtros">0.00€</td>
-        </tr>
-      </tfoot>
-    </table>
-
-    <!-- 🟢 TOTAL GENERAL -->
-    <div class="general-total">
-      TOTAL GENERAL: <span id="totalGeneral">0.00€</span>
+      <div class="general-total">TOTAL GENERAL: <span>69.00€</span></div>
     </div>
-    <!-- 🔸 COMPARATIVA DE AHORRO (solo visible si el comercial la activó) -->
-<div id="comparativaCliente" style="display:none; margin-top:40px;">
-  <h2>Comparativa de Ahorro</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Servicio Actual</th>
-        <th>Gasto Actual (€)</th>
-        <th>Nuevo Servicio</th>
-        <th>Nuevo Gasto (€)</th>
-      </tr>
-    </thead>
-    <tbody id="tablaComparativa">
-      <tr>
-        <td colspan="4" style="text-align:center;color:#777;">
-          (Comparativa no incluida en esta propuesta)
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
 
+    <aside class="panel-derecho">
+      <h2>Revisión / Comentarios</h2>
+      <textarea id="comentario" placeholder="Escribe observaciones o motivos de revisión..."></textarea>
+    </aside>
+
+    <div class="contenedor-botones">
+      <button id="btnDescargar">📄 Descargar PDF</button>
+      <button id="btnAceptar">✅ Aceptar</button>
+      <button id="btnRevisar" disabled>🔄 Revisar</button>
+      <button id="btnRechazar">❌ Rechazar</button>
+    </div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div id="pantallaResultado" class="resultado">
+    <h1 id="tituloResultado"></h1>
+    <p id="mensajeResultado"></p>
+    <button id="volver">🔙 Volver a la Propuesta</button>
   </div>
 
   <script>
-    const datos = JSON.parse(localStorage.getItem("ofertaTelekos"));
+    const comentario = document.getElementById("comentario");
+    const btnAceptar = document.getElementById("btnAceptar");
+    const btnRevisar = document.getElementById("btnRevisar");
+    const btnRechazar = document.getElementById("btnRechazar");
+    const pantallaPropuesta = document.getElementById("pantallaPropuesta");
+    const pantallaResultado = document.getElementById("pantallaResultado");
 
-    if (datos) {
-    // Mostrar u ocultar la comparativa según la configuración del comercial
-    if (datos.mostrarComparativa) {
-      document.getElementById("comparativaCliente").style.display = "block";
-        // Si hay datos de comparativa, mostrarlos en la tabla
-  if (Array.isArray(datos.comparativa) && datos.comparativa.length > 0) {
-    const tbodyComp = document.getElementById("tablaComparativa");
-    tbodyComp.innerHTML = ""; // limpiar contenido previo
-
-    datos.comparativa.forEach(c => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${c.servicioActual || ""}</td>
-        <td>${c.gastoActual ? parseFloat(c.gastoActual).toFixed(2) + "€" : ""}</td>
-        <td>${c.nuevoServicio || ""}</td>
-        <td>${c.nuevoGasto ? parseFloat(c.nuevoGasto).toFixed(2) + "€" : ""}</td>
-      `;
-      tbodyComp.appendChild(tr);
+    comentario.addEventListener("input", () => {
+      const texto = comentario.value.trim();
+      btnRevisar.disabled = texto.length === 0;
+      btnAceptar.disabled = texto.length > 0;
     });
 
-    // Agregar fila de totales si existen
-    if (datos.ahorroMensual || datos.ahorroAnual) {
-      const trTotales = document.createElement("tr");
-      trTotales.style.background = "#f9fbfc";
-      trTotales.innerHTML = `
-        <td colspan="4" style="text-align:right; font-weight:bold; color:#0c4a75;">
-          Ahorro mensual: ${datos.ahorroMensual || "0.00"}€ |
-          Ahorro anual: ${datos.ahorroAnual || "0.00"}€ |
-          ${datos.porcentajeAhorro || "0%"} de ahorro
-        </td>
-      `;
-      tbodyComp.appendChild(trTotales);
+    document.getElementById("btnDescargar").addEventListener("click", () => window.print());
+
+    function mostrarResultado(estado) {
+      pantallaPropuesta.style.display = "none";
+      pantallaResultado.style.display = "block";
+      const titulo = document.getElementById("tituloResultado");
+      const mensaje = document.getElementById("mensajeResultado");
+
+      if (estado === "aceptada") {
+        titulo.textContent = "✅ Propuesta Aceptada";
+        titulo.className = "aceptada";
+        mensaje.textContent = "Gracias. La propuesta ha sido aceptada correctamente.";
+      } else if (estado === "revisar") {
+        titulo.textContent = "🔄 Propuesta Enviada a Revisión";
+        titulo.className = "revisar";
+        mensaje.textContent = "Tu comentario ha sido enviado para revisión del comercial.";
+      } else if (estado === "rechazada") {
+        titulo.textContent = "❌ Propuesta Rechazada";
+        titulo.className = "rechazada";
+        mensaje.textContent = "La propuesta ha sido rechazada. Nos pondremos en contacto contigo.";
+      }
     }
-  }
 
-    } else {
-      document.getElementById("comparativaCliente").style.display = "none";
+    btnAceptar.addEventListener("click", () => mostrarResultado("aceptada"));
+    btnRevisar.addEventListener("click", () => {
+      if (comentario.value.trim()) mostrarResultado("revisar");
+      else alert("⚠️ Debes escribir un comentario para revisar.");
+    });
+    btnRechazar.addEventListener("click", () => mostrarResultado("rechazada"));
+
+    document.getElementById("volver").addEventListener("click", () => {
+      pantallaResultado.style.display = "none";
+      pantallaPropuesta.style.display = "block";
+      comentario.value = "";
+      btnRevisar.disabled = true;
+      btnAceptar.disabled = false;
+    });
+
+    // 🌙 MODO OSCURO CON PERSISTENCIA
+    const switchOscuro = document.getElementById("modoOscuro");
+    const guardado = localStorage.getItem("modoOscuro") === "true";
+    if (guardado) {
+      document.body.classList.add("dark");
+      switchOscuro.checked = true;
     }
 
-
-      document.getElementById("fecha").textContent = datos.fecha || "";
-      document.getElementById("empresa").textContent = datos.empresa || "";
-
-      const tbodyPBX = document.querySelector("#tablaPBX tbody");
-      const tbodyOtros = document.querySelector("#tablaOtros tbody");
-
-      let totalPBX = 0;
-      let totalOtros = 0;
-
-      const pbxKeywords = [
-        "numeracion", "numeraciones", "extensiones", "canal", "canales",
-        "hardware", "software",
-        "tp 100 nac", "tp 200 nac", "tp 500 nac", "tp 1000 nac", "tp 2000 nac"
-      ];
-
-      datos.servicios.forEach(s => {
-        const tr = document.createElement("tr");
-
-        const esPBX = pbxKeywords.some(p => s.servicio.toLowerCase().includes(p));
-        const cantidad = parseFloat(s.cantidad || 0) || 0;
-        const costeUnitario = parseFloat(s.coste || s.costeMensual || 0) || 0;
-
-        let totalServicio = parseFloat(s.total || 0);
-        if ((!totalServicio || totalServicio === 0) && cantidad && costeUnitario) {
-          totalServicio = cantidad * costeUnitario;
-        }
-
-        if (esPBX) {
-          totalPBX += totalServicio;
-          tr.innerHTML = `
-            <td>${s.servicio}</td>
-            <td>${cantidad || ""}</td>
-            <td>—</td>
-            <td>—</td>
-          `;
-          tbodyPBX.appendChild(tr);
-        } else {
-          totalOtros += totalServicio;
-          tr.innerHTML = `
-            <td>${s.servicio}</td>
-            <td>${cantidad || ""}</td>
-            <td>${costeUnitario ? costeUnitario.toFixed(2) + "€" : "—"}</td>
-            <td>${totalServicio.toFixed(2)}€</td>
-          `;
-          tbodyOtros.appendChild(tr);
-        }
-      });
-
-      // Totales
-      document.getElementById("totalPBX").textContent = totalPBX.toFixed(2) + "€";
-      document.getElementById("totalOtros").textContent = totalOtros.toFixed(2) + "€";
-      document.getElementById("totalGeneral").textContent = (totalPBX + totalOtros).toFixed(2) + "€";
-
-    } else {
-      document.body.innerHTML = "<h2 style='text-align:center;color:#b82319'>⚠️ No hay datos de oferta cargados</h2>";
-    }
+    switchOscuro.addEventListener("change", () => {
+      document.body.classList.toggle("dark", switchOscuro.checked);
+      localStorage.setItem("modoOscuro", switchOscuro.checked);
+    });
   </script>
-<!-- 🟢 BOTÓN DESCARGAR PDF -->
-<div style="text-align:center; margin: 30px 0;">
-  <button id="btnDescargar">📄 Descargar Propuesta en PDF</button>
-</div>
-
-<script>
-  // 🟢 Botón Descargar → abrir diálogo de imprimir/guardar PDF
-  document.getElementById("btnDescargar").addEventListener("click", function() {
-    window.print();
-  });
-</script>
-
 
 </body>
 </html>
