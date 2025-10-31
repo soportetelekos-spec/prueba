@@ -284,77 +284,89 @@
       color: #fff;
     }
 
-    .comparativa-cliente {
-      margin-top: 25px;
-      border-radius: 10px;
-      padding: 25px;
-      background: var(--panel);
-      box-shadow: 0 4px 10px var(--sombra);
-    }
+.comparativa-cliente {
+  margin-top: 25px;
+  border-radius: 10px;
+  padding: 25px;
+  background: var(--panel);
+  box-shadow: 0 4px 10px var(--sombra);
+}
 
-    .comparativa-cliente table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
+.comparativa-cliente table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
 
-    .comparativa-cliente th,
-    .comparativa-cliente td {
-      border: 1px solid #dce3ea;
-      padding: 8px;
-      text-align: center;
-    }
+.comparativa-cliente th,
+.comparativa-cliente td {
+  border: 1px solid #dce3ea;
+  padding: 8px;
+  text-align: center;
+}
 
-    .comparativa-cliente h2 {
-      color: var(--secundario);
-      border-bottom: 2px solid var(--secundario);
-      padding-bottom: 5px;
-    }
+.comparativa-cliente h2 {
+  color: var(--secundario);
+  border-bottom: 2px solid var(--secundario);
+  padding-bottom: 5px;
+}
 
-    /* --- ESTILOS PARA IMPRESIÓN / PDF --- */
-    @media print {
-      .switch-container,
-      #volver {
-        display: none !important;
-      }
 
-      .contenedor-botones {
-        display: flex !important;
-        justify-content: center !important;
-        gap: 20px !important;
-        margin-top: 40px !important;
-        page-break-inside: avoid !important;
-      }
+/* --- ESTILOS PARA IMPRESIÓN / PDF --- */
+@media print {
+  /* Ocultar botones interactivos que no hacen falta en el PDF */
+  .switch-container,
+  #volver {
+    display: none !important;
+  }
 
-      .contenedor-botones button {
-        background: #116cad !important;
-        color: white !important;
-        border: none !important;
-        padding: 10px 20px !important;
-        border-radius: 8px !important;
-        font-size: 14px !important;
-      }
+  /* Centrar y mantener los botones visibles si quieres incluirlos */
+  .contenedor-botones {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 20px !important;
+    margin-top: 40px !important;
+    page-break-inside: avoid !important;
+  }
 
-      table, tr, td, th {
-        page-break-inside: avoid !important;
-      }
+  .contenedor-botones button {
+    background: #116cad !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+  }
 
-      .oferta,
-      .panel-derecho,
-      .comparativa-cliente,
-      .general-total {
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
+  /* Evitar cortes de tablas o secciones */
+  table, tr, td, th {
+    page-break-inside: avoid !important;
+  }
 
-      h3, h2 {
-        page-break-after: avoid !important;
-      }
+  .oferta,
+  .panel-derecho,
+  .comparativa-cliente,
+  .general-total {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
 
-      @page {
-        margin: 20mm;
-      }
-    }
+  /* Forzar salto de página limpio si no cabe */
+  h3, h2 {
+    page-break-after: avoid !important;
+  }
+
+  /* Margen de la hoja */
+  @page {
+    margin: 20mm;
+  }
+}
+
+@media print {
+  .contenedor-botones { display: none !important; }
+}
+
+
   </style>
 </head>
 <body>
@@ -481,6 +493,169 @@
       document.body.classList.toggle("dark", switchOscuro.checked);
       localStorage.setItem("modoOscuro", switchOscuro.checked);
     });
+
+// === CARGAR DATOS GUARDADOS DESDE LA OFERTA ===
+document.addEventListener("DOMContentLoaded", () => {
+  const datos = JSON.parse(localStorage.getItem("ofertaTelekos") || "{}");
+
+  if (datos.empresa) {
+    document.querySelector(".oferta span").textContent = datos.empresa;
+  }
+
+  if (datos.fecha) {
+    document.querySelector(".oferta p span").textContent = datos.fecha;
+  }
+
+  // Insertar tabla comparativa si corresponde
+  if (datos.mostrarComparativa && datos.comparativa?.length > 0) {
+    const divComparativa = document.createElement("div");
+    divComparativa.className = "oferta comparativa-cliente";
+    divComparativa.innerHTML = `
+      <h2>Comparativa de Ahorro</h2>
+      <table>
+        <thead>
+          <tr>
+            <th style="background:#f58220;color:white;">Servicio Actual</th>
+            <th style="background:#b82319;color:white;">Gasto Actual (€)</th>
+            <th style="background:#0c4a75;color:white;">Nuevo Servicio</th>
+            <th style="background:#77b255;color:white;">Nuevo Gasto (€)</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${datos.comparativa
+            .map(c => `
+              <tr>
+                <td>${c.servicioActual || "-"}</td>
+                <td>${parseFloat(c.gastoActual || 0).toFixed(2)}</td>
+                <td>${c.nuevoServicio || "-"}</td>
+                <td>${parseFloat(c.nuevoGasto || 0).toFixed(2)}</td>
+              </tr>
+            `)
+            .join("")}
+        </tbody>
+      </table>
+
+      <div class="general-total" style="margin-top:15px;">
+        <strong>Ahorro mensual:</strong> ${datos.ahorroMensual || "0.00"} €<br>
+        <strong>Ahorro anual:</strong> ${datos.ahorroAnual || "0.00"} €<br>
+        <strong>Porcentaje de ahorro:</strong> ${datos.porcentajeAhorro || "0%"}
+      </div>
+    `;
+    document.querySelector("#pantallaPropuesta").insertBefore(divComparativa, document.querySelector(".panel-derecho"));
+  }
+});
+// === CARGAR DATOS GUARDADOS DESDE LA OFERTA ===
+document.addEventListener("DOMContentLoaded", () => {
+  const datos = JSON.parse(localStorage.getItem("ofertaTelekos") || "{}");
+
+  if (!datos || Object.keys(datos).length === 0) return;
+
+  // 🏢 Empresa y fecha
+  const spanEmpresa = document.querySelector(".oferta p span");
+  const spanFecha = document.querySelector(".oferta p strong + span, .oferta p span");
+  if (spanEmpresa) spanEmpresa.textContent = datos.empresa || "Cliente";
+  if (spanFecha) spanFecha.textContent = datos.fecha || new Date().toLocaleDateString();
+
+  // 💰 Reemplazar tabla de servicios
+  const tablaPBX = document.querySelectorAll(".oferta table")[0];
+  const tablaOtros = document.querySelectorAll(".oferta table")[1];
+  const tbodyPBX = tablaPBX.querySelector("tbody");
+  const tbodyOtros = tablaOtros.querySelector("tbody");
+
+  tbodyPBX.innerHTML = "";
+  tbodyOtros.innerHTML = "";
+
+  // Clasificación de servicios PBX vs Otros
+  const pbxKeywords = [
+    "numeracion", "numeraciones", "extensiones", "canal", "canales",
+    "hardware", "software", "tp 100 nac", "tp 200 nac",
+    "tp 500 nac", "tp 1000 nac", "tp 2000 nac"
+  ];
+
+  let totalPBX = 0;
+  let totalOtros = 0;
+
+  datos.servicios?.forEach(s => {
+    const total = (parseFloat(s.coste || 0) * parseFloat(s.cantidad || 0)) || 0;
+    const filaHTML = `
+      <tr>
+        <td>${s.servicio}</td>
+        <td>${s.cantidad}</td>
+        <td>${parseFloat(s.coste).toFixed(2)}€</td>
+        <td>${total.toFixed(2)}€</td>
+      </tr>
+    `;
+
+    if (pbxKeywords.some(k => s.servicio.toLowerCase().includes(k))) {
+      tbodyPBX.insertAdjacentHTML("beforeend", filaHTML);
+      totalPBX += total;
+    } else {
+      tbodyOtros.insertAdjacentHTML("beforeend", filaHTML);
+      totalOtros += total;
+    }
+  });
+
+  // Actualizar totales en las tablas
+  tablaPBX.querySelector("tfoot td:last-child").textContent = totalPBX.toFixed(2) + "€";
+  tablaOtros.querySelector("tfoot td:last-child").textContent = totalOtros.toFixed(2) + "€";
+
+  const totalGeneral = totalPBX + totalOtros;
+
+  // 🔹 Actualizar el TOTAL GENERAL principal
+  const totalGeneralEl = document.querySelector(".general-total span");
+  if (totalGeneralEl) totalGeneralEl.textContent = totalGeneral.toFixed(2) + "€";
+// === COMPARATIVA DE AHORRO (una sola tabla) ===
+const divAnterior = document.querySelector(".comparativa-cliente");
+if (divAnterior) divAnterior.remove(); // ✅ evita duplicados si recargas varias veces
+
+if (datos.mostrarComparativa && Array.isArray(datos.comparativa) && datos.comparativa.length > 0) {
+  const divComparativa = document.createElement("div");
+  divComparativa.className = "oferta comparativa-cliente";
+  
+  let filasHTML = "";
+  datos.comparativa.forEach(c => {
+    filasHTML += `
+      <tr>
+        <td>${c.servicioActual || "-"}</td>
+        <td>${parseFloat(c.gastoActual || 0).toFixed(2)}</td>
+        <td>${c.nuevoServicio || "-"}</td>
+        <td>${parseFloat(c.nuevoGasto || 0).toFixed(2)}</td>
+      </tr>
+    `;
+  });
+
+  divComparativa.innerHTML = `
+    <h2>Comparativa de Ahorro</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="background:#f58220;color:white;">Servicio Actual</th>
+          <th style="background:#b82319;color:white;">Gasto Actual (€)</th>
+          <th style="background:#0c4a75;color:white;">Nuevo Servicio</th>
+          <th style="background:#77b255;color:white;">Nuevo Gasto (€)</th>
+        </tr>
+      </thead>
+      <tbody>${filasHTML}</tbody>
+    </table>
+
+    <div class="general-total" style="margin-top:15px;">
+      <strong>Ahorro mensual:</strong> ${datos.ahorroMensual || "0.00"} €<br>
+      <strong>Ahorro anual:</strong> ${datos.ahorroAnual || "0.00"} €<br>
+      <strong>Porcentaje de ahorro:</strong> ${datos.porcentajeAhorro || "0%"}
+    </div>
+  `;
+
+  // Inserta justo antes del panel derecho
+  document.querySelector("#pantallaPropuesta").insertBefore(
+    divComparativa,
+    document.querySelector(".panel-derecho")
+  );
+}
+
+
+});
+
+
   </script>
 
 </body>
