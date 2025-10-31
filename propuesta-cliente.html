@@ -284,12 +284,24 @@
       color: #fff;
     }
 
-.comparativa-cliente table th {
-  font-weight: bold;
-  text-align: center;
+.comparativa-cliente {
+  margin-top: 25px;
+  border-radius: 10px;
+  padding: 25px;
+  background: var(--panel);
+  box-shadow: 0 4px 10px var(--sombra);
 }
 
-.comparativa-cliente table td {
+.comparativa-cliente table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.comparativa-cliente th,
+.comparativa-cliente td {
+  border: 1px solid #dce3ea;
+  padding: 8px;
   text-align: center;
 }
 
@@ -537,42 +549,55 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🔹 Actualizar el TOTAL GENERAL principal
   const totalGeneralEl = document.querySelector(".general-total span");
   if (totalGeneralEl) totalGeneralEl.textContent = totalGeneral.toFixed(2) + "€";
+// === COMPARATIVA DE AHORRO (una sola tabla) ===
+const divAnterior = document.querySelector(".comparativa-cliente");
+if (divAnterior) divAnterior.remove(); // ✅ evita duplicados si recargas varias veces
 
-  // === COMPARATIVA DE AHORRO (solo si está activada) ===
-  if (datos.mostrarComparativa && datos.comparativa?.length > 0) {
-    const divComparativa = document.createElement("div");
-    divComparativa.className = "oferta comparativa-cliente";
-    divComparativa.innerHTML = `
-      <h2>Comparativa de Ahorro</h2>
-      <table>
-        <thead>
-          <tr>
-            <th style="background:#f58220;color:white;">Servicio Actual</th>
-            <th style="background:#b82319;color:white;">Gasto Actual (€)</th>
-            <th style="background:#0c4a75;color:white;">Nuevo Servicio</th>
-            <th style="background:#77b255;color:white;">Nuevo Gasto (€)</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${datos.comparativa.map(c => `
-            <tr>
-              <td>${c.servicioActual || "-"}</td>
-              <td>${parseFloat(c.gastoActual || 0).toFixed(2)}</td>
-              <td>${c.nuevoServicio || "-"}</td>
-              <td>${parseFloat(c.nuevoGasto || 0).toFixed(2)}</td>
-            </tr>
-          `).join("")}
-        </tbody>
-      </table>
-
-      <div class="general-total" style="margin-top:15px;">
-        <strong>Ahorro mensual:</strong> ${datos.ahorroMensual || "0.00"} €<br>
-        <strong>Ahorro anual:</strong> ${datos.ahorroAnual || "0.00"} €<br>
-        <strong>Porcentaje de ahorro:</strong> ${datos.porcentajeAhorro || "0%"}
-      </div>
+if (datos.mostrarComparativa && Array.isArray(datos.comparativa) && datos.comparativa.length > 0) {
+  const divComparativa = document.createElement("div");
+  divComparativa.className = "oferta comparativa-cliente";
+  
+  let filasHTML = "";
+  datos.comparativa.forEach(c => {
+    filasHTML += `
+      <tr>
+        <td>${c.servicioActual || "-"}</td>
+        <td>${parseFloat(c.gastoActual || 0).toFixed(2)}</td>
+        <td>${c.nuevoServicio || "-"}</td>
+        <td>${parseFloat(c.nuevoGasto || 0).toFixed(2)}</td>
+      </tr>
     `;
-    document.querySelector("#pantallaPropuesta").insertBefore(divComparativa, document.querySelector(".panel-derecho"));
-  }
+  });
+
+  divComparativa.innerHTML = `
+    <h2>Comparativa de Ahorro</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="background:#f58220;color:white;">Servicio Actual</th>
+          <th style="background:#b82319;color:white;">Gasto Actual (€)</th>
+          <th style="background:#0c4a75;color:white;">Nuevo Servicio</th>
+          <th style="background:#77b255;color:white;">Nuevo Gasto (€)</th>
+        </tr>
+      </thead>
+      <tbody>${filasHTML}</tbody>
+    </table>
+
+    <div class="general-total" style="margin-top:15px;">
+      <strong>Ahorro mensual:</strong> ${datos.ahorroMensual || "0.00"} €<br>
+      <strong>Ahorro anual:</strong> ${datos.ahorroAnual || "0.00"} €<br>
+      <strong>Porcentaje de ahorro:</strong> ${datos.porcentajeAhorro || "0%"}
+    </div>
+  `;
+
+  // Inserta justo antes del panel derecho
+  document.querySelector("#pantallaPropuesta").insertBefore(
+    divComparativa,
+    document.querySelector(".panel-derecho")
+  );
+}
+
+
 });
 
 
