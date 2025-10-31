@@ -1,607 +1,1650 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Propuesta Cliente - Telekos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Propuesta de Servicio - Telekos</title>
+
+  <!-- ✅ Librería Select2 (buscador dentro del select) -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
   <style>
-    :root {
-      --fondo: #f4f6f8;
-      --texto: #0c4a75;
-      --primario: #116cad;
-      --secundario: #f58220;
-      --panel: #fff;
-      --sombra: rgba(0, 0, 0, 0.1);
-      --total-fondo: #f2f6ff;
-      --total-texto: #0c4a75;
-      --total-general-fondo: #dfefff;
-    }
-
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: var(--fondo);
-      color: var(--texto);
-      margin: 0;
-      padding: 0;
-      transition: background 0.4s ease, color 0.4s ease;
-    }
-
-    /* CABECERA */
-    .cabecera {
-      background: var(--panel);
-      border-bottom: 3px solid var(--primario);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 10px;
-      position: relative;
-    }
-
-    .cabecera img {
-      width: 950px;
-      height: auto;
-      border-radius: 10px 10px 0 0;
-      object-fit: contain;
-    }
-
-    /* SWITCH MODO OSCURO */
-    .switch-container {
-      position: absolute;
-      right: 30px;
-      top: 25px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .switch-label {
-      font-size: 14px;
-      color: var(--texto);
-      font-weight: 600;
-    }
-
-    .switch {
-      position: relative;
-      width: 52px;
-      height: 30px;
-    }
-
-    .switch input { opacity: 0; width: 0; height: 0; }
-
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      inset: 0;
-      background-color: #ccc;
-      border-radius: 34px;
-      transition: .4s;
-    }
-
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 22px;
-      width: 22px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      border-radius: 50%;
-      transition: .4s;
-    }
-
-    input:checked + .slider {
-      background-color: #3b82f6;
-      box-shadow: 0 0 10px rgba(59,130,246,0.4);
-    }
-
-    input:checked + .slider:before {
-      transform: translateX(22px);
-    }
-
-    /* CONTENIDO */
-    .oferta {
-      width: 950px;
-      background: var(--panel);
-      margin: 0 auto;
-      padding: 40px;
-      border-radius: 0 0 10px 10px;
-      box-shadow: 0 4px 12px var(--sombra);
-      box-sizing: border-box;
-      transition: background 0.4s ease, color 0.4s ease;
-    }
-
-    h1 { color: var(--texto); margin-top: 0; }
-    h2 { color: var(--secundario); border-bottom: 2px solid var(--secundario); padding-bottom: 5px; }
-    h3 {
-      background: var(--secundario);
-      color: #fff;
-      padding: 8px 10px;
-      border-radius: 6px;
-      margin-top: 30px;
-      font-size: 16px;
-      text-transform: uppercase;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-      border: 2px solid var(--secundario);
-    }
-
-    th, td {
-      border: 1px solid #dce3ea;
-      padding: 10px;
-      text-align: center;
-    }
-
-    th { background: #f9fbfc; color: var(--texto); }
-
-    tr.total-row {
-      background: var(--total-fondo);
-      font-weight: bold;
-      color: var(--total-texto);
-    }
-
-    .general-total {
-      background: var(--total-general-fondo);
-      font-weight: bold;
-      font-size: 18px;
-      color: var(--texto);
-      text-align: right;
-      padding: 15px;
-      border-radius: 8px;
-      margin-top: 20px;
-      border: 1px solid transparent;
-    }
-
-    /* PANEL DE REVISIÓN */
-    .panel-derecho {
-      width: 950px;
-      background: var(--panel);
-      margin: 30px auto 0 auto;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px var(--sombra);
-      box-sizing: border-box;
-    }
-
-    .panel-derecho h2 {
-      color: var(--texto);
-      border-bottom: 2px solid var(--secundario);
-      padding-bottom: 5px;
-      text-align: center;
-    }
-
-    .panel-derecho textarea {
-      width: 100%;
-      height: 200px;
-      resize: none;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      font-size: 14px;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      margin-top: 10px;
-      box-sizing: border-box;
-    }
-
-    /* BOTONES */
-    .contenedor-botones {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin: 40px auto 60px auto;
-    }
-
-    .contenedor-botones button {
-      background-color: var(--primario);
-      color: #fff;
-      border: none;
-      padding: 12px 25px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 15px;
-      font-weight: bold;
-      transition: background 0.2s ease, box-shadow 0.2s;
-    }
-
-    .contenedor-botones button:hover:not(:disabled) {
-      background-color: #0c4a75;
-      box-shadow: 0 0 10px var(--primario);
-    }
-
-    #btnAceptar { background: #4CAF50; }
-    #btnAceptar:disabled { background: #a8d5a8; cursor: not-allowed; }
-    #btnRevisar { background: #3b82f6; }
-    #btnRevisar:disabled { background: #93c5fd; cursor: not-allowed; }
-    #btnRechazar { background: #d9534f; }
-
-    /* RESULTADO */
-    .resultado {
-      display: none;
-      background: var(--panel);
-      width: 700px;
-      margin: 120px auto;
-      padding: 50px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px var(--sombra);
-      text-align: center;
-    }
-
-    .aceptada { color: #28a745; }
-    .revisar { color: #3b82f6; }
-    .rechazada { color: #d9534f; }
-
-    #volver {
-      margin-top: 30px;
-      background: var(--primario);
-      color: white;
-      border: none;
-      padding: 12px 25px;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    #volver:hover { background: #0c4a75; }
-
-    /* 🌙 MODO OSCURO AZUL ELEGANTE */
-    body.dark {
-      --fondo: #1e293b;
-      --panel: #2b3648;
-      --texto: #dbeafe;
-      --primario: #2563eb;
-      --secundario: #3b82f6;
-      --sombra: rgba(0, 0, 0, 0.3);
-      --total-fondo: #334155;
-      --total-texto: #93c5fd;
-      --total-general-fondo: #1e293b;
-    }
-
-    body.dark .general-total {
-      border: 1px solid #3b82f6;
-    }
-
-    body.dark th {
-      background: #3b4b5f;
-      color: #dbeafe;
-    }
-
-    body.dark td {
-      border-color: #475569;
-      color: #e2e8f0;
-    }
-
-    body.dark .panel-derecho textarea {
-      background: #3b4b5f;
-      color: #fff;
-      border-color: #64748b;
-    }
-
-    body.dark h3 {
-      background: #2563eb;
-      color: #fff;
-    }
-
-.comparativa-cliente {
-  margin-top: 25px;
-  border-radius: 10px;
-  padding: 25px;
-  background: var(--panel);
-  box-shadow: 0 4px 10px var(--sombra);
+  body {
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
 }
 
-.comparativa-cliente table {
+
+    /* ----------- ESTRUCTURA GENERAL ----------- */
+   .container, .page2, .footer-section, .comparativa {
+  max-width: 850px;          /* Antes: width: 850px */
+  width: 100%;
+  background: #fff;
+  margin:0 auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+  border: 1px solid #d6dce3;
+  box-sizing: border-box;     /* Evita que bordes o padding sumen ancho */
+}
+
+    header {
+      background: #0c4a75;
+      color: white;
+      padding: 15px 25px;
+    }
+
+    header h2 { color: #f58220; font-size: 18px; margin: 0 0 5px; }
+    header p { margin: 0; font-size: 14px; }
+
+    .logos {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 20px;
+      padding-right: 25px;
+      margin-top: 5px;
+    }
+
+    .logos img { height: 30px; }
+
+    /* -------- FORMULARIO -------- */
+    .form-section { display: flex; justify-content: space-between; padding: 20px 30px; background-color: #f9f9f9; }
+    .form-left { flex: 1; }
+    .form-left label { display: block; margin-top: 10px; color: #0c4a75; font-weight: bold; }
+    .form-left input { width: 90%; padding: 6px; margin-top: 4px; border: 1px solid #c5c5c5; border-radius: 4px; }
+
+    .form-right {
+      width: 220px;
+      background: linear-gradient(to bottom, rgba(12,74,117,0.85), rgba(12,74,117,0.85));
+      color: white;
+      border-radius: 6px;
+      text-align: center;
+      padding: 25px 10px;
+    }
+
+    .form-right img { width: 120px; margin-bottom: 15px; }
+    .form-right a { color: white; text-decoration: none; font-weight: bold; font-size: 13px; }
+
+    /* -------- COMERCIAL -------- */
+  /* -------- BLOQUE SU COMERCIAL (EDITABLE) -------- */
+.comercial {
+  width: 800px;
+  margin: 0 auto;
+  background-color: #f3f7fc;
+  border: 1.5px solid #cdd5df;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  padding: 20px 25px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.comercial-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  background-image: url('logo2.png.jpg'); /* tu logo */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-right: 25px;
+  background-color: #fff;
+  border: 1px solid #cdd5df;
+}
+
+.comercial-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.comercial-info h4 {
+  color: #0c4a75;
+  font-weight: bold;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+.comercial-info label {
+  font-weight: bold;
+  color: #0c4a75;
+  font-size: 13.5px;
+}
+
+.comercial-info input {
+  border: none;
+  border-bottom: 1.5px solid #0c4a75;
+  background: transparent;
+  width: 70%;
+  padding: 3px 2px;
+  font-size: 13.5px;
+  color: #0c4a75;
+  margin-bottom: 4px;
+  transition: border-color 0.2s;
+}
+
+.comercial-info input:focus {
+  outline: none;
+  border-color: #f58220;
+}
+
+.comercial-info span {
+  font-weight: bold;
+  color: #0c4a75;
+}
+
+    /* -------- TABLA SERVICIOS -------- */
+    .page2 { padding: 25px 35px 50px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th { padding: 10px; border: 1px solid #cdd5df; text-align: center; font-weight: bold; }
+    th:nth-child(1){background:#fff4ec;color:#f58220;} th:nth-child(2),th:nth-child(3){background:#e9f0fa;color:#0c4a75;} th:nth-child(4){background:#0c4a75;color:white;}
+    td{border:1px solid #cdd5df;text-align:center;padding:6px;} td input{width:95%;border:none;border-bottom:1px solid #ccc;text-align:center;}
+
+    .botones{margin-top:20px;display:flex;justify-content:flex-end;gap:10px;}
+    button{padding:8px 16px;border:none;border-radius:4px;font-weight:bold;color:white;cursor:pointer;}
+    .add{background:#0c4a75;} .remove{background:#f58220;}
+
+    /* -------- FOOTER -------- */
+    /* -------- FOOTER (CORREGIDO Y FIJO) -------- */
+/* -------- FOOTER (CUADRO DE OBSERVACIONES MEJORADO) -------- */
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  border-bottom: 4px solid #0c4a75;
+  background: #fff;
+  padding: 0;
+}
+
+.observaciones-box {
+  flex: 1;
+  border-right: 2px solid #dce3ea;
+  display: flex;
+  flex-direction: column;
+  background: #fffaf7;
+  position: relative;
+  padding: 10px; /* margen interno para dar aire */
+  box-sizing: border-box;
+}
+
+/* Título con checkbox decorativo */
+.obs-header {
+  display: flex;
+  align-items: center;
+  background: #fffaf7;
+  color: #f58220;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 8px 10px;
+  border-bottom: 2px solid #f58220;
+  margin-bottom: 6px;
+}
+
+/* El "checkbox" visual */
+.obs-header::before {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #f58220;
+  border-radius: 3px;
+  margin-right: 8px;
+  background: #fff;
+}
+
+/* Área de texto */
+.observaciones-box textarea {
+  flex: 1;
+  width: 100%;
+  resize: none;
+  border: 1px solid #f58220;
+  border-radius: 6px;
+  padding: 12px;
+  background: #fffdf9;
+  font-family: inherit;
+  font-size: 14px;
+  color: #333;
+  box-sizing: border-box;
+  margin-top: 5px;
+}
+
+/* COLUMNA DE COSTES */
+.costes-box {
+  flex: 1.2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+  padding: 15px;
+  align-items: center;
+  background: #f9fbfc;
+}
+
+.coste-item {
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 6px 8px;
+  border-radius: 4px;
+  text-align: right;
+}
+
+.coste-item.naranja { background: #f58220; color: #fff; }
+.coste-item.azul { background: #0c4a75; color: #fff; }
+
+.costes-box input {
+  border: 1px solid #cdd5df;
+  border-radius: 4px;
+  padding: 6px;
+  text-align: right;
+  background: #fff;
+}
+
+
+    .coste-item{font-weight:bold;text-transform:uppercase;padding:5px 8px;border-radius:4px;text-align:right;}
+    .coste-item.naranja{background:#f58220;color:#fff;} .coste-item.azul{background:#0c4a75;color:#fff;}
+    .costes-box input{border:1px solid #cdd5df;border-radius:4px;padding:6px;text-align:right;background:#f9fbfc;}
+    .nota-final{text-align:center;font-size:12px;color:#444;background:#f5f7fa;padding:10px;}
+   /* -------- BLOQUE DE FIRMA DEL CLIENTE (DISEÑO MEJORADO) -------- */
+/* -------- BLOQUE DE FIRMA (DISEÑO AJUSTADO Y LIMPIO) -------- */
+.firma-box {
+  background: #f9fbff;
+  border-top: 4px solid #0c4a75;
+  border-radius: 20px;
+  margin-top: 25px;
+  padding: 25px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.firma-header {
+  text-align: center;
+  color: #0c4a75;
+  font-weight: bold;
+  font-size: 15px;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.firma-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+  border: 1px solid #dce3ea;
+  border-radius: 16px;
+  padding: 25px 30px;
+  background: #f3f7fc;
+}
+
+/* Datos del cliente */
+.firma-datos {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.firma-datos label {
+  font-weight: bold;
+  color: #0c4a75;
+  font-size: 14px;
+  margin-right: 8px;
+}
+
+.firma-datos input {
+  border: none;
+  border-bottom: 2px solid #0c4a75;
+  background: transparent;
+  width: 75%;
+  padding: 3px 5px;
+  font-size: 14px;
+  color: #0c4a75;
+  transition: border-color 0.2s;
+}
+
+.firma-datos input:focus {
+  outline: none;
+  border-color: #f58220;
+}
+
+/* Caja de FIRMA Y SELLO */
+.firma-sello {
+  flex: 0 0 200px;
+  height: 90px;
+  border: 1.5px solid #0c4a75;
+  border-radius: 10px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #0c4a75;
+  letter-spacing: 0.5px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
+}
+
+.firma-sello:hover {
+  border-color: #f58220;
+  color: #f58220;
+  background: #fefaf7;
+  cursor: pointer;
+}
+
+.servicioSelect, .servicioPersonalizado {
+  width: 100%;
+  border: 1px solid #cdd5df;
+  border-radius: 4px;
+  padding: 5px;
+  font-size: 13.5px;
+  color: #0c4a75;
+  background: #fff;
+}
+
+
+    /* -------- COMPARATIVA -------- */
+   /* --- FONDOS DE LOS INPUTS SEGÚN SU COLUMNA --- */
+
+/* Servicio (columna izquierda, naranja suave) */
+/* -------- COMPARATIVA -------- */
+.comparativa {
+  padding: 25px 35px 20px; /* menos espacio inferior */
+  margin-bottom: 0;        /* elimina el hueco extra */
+  box-shadow: none;        /* evita sombra debajo */
+  border-bottom: none;     /* por si alguna línea genera borde */
+}
+
+.comparativa table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
 }
 
-.comparativa-cliente th,
-.comparativa-cliente td {
-  border: 1px solid #dce3ea;
-  padding: 8px;
+.comparativa th,
+.comparativa td {
+  border: 1px solid #ccc;
   text-align: center;
+  padding: 6px;
 }
 
-.comparativa-cliente h2 {
-  color: var(--secundario);
-  border-bottom: 2px solid var(--secundario);
-  padding-bottom: 5px;
+/* Colores de encabezados (se mantienen igual) */
+.comparativa th.orange { background: #f58220; color: white; }
+.comparativa th.blue { background: #0c4a75; color: white; }
+.comparativa th.red { background: #b82319; color: white; }
+.comparativa th.green { background: #77b255; color: white; }
+
+/* --- Inputs con fondo translúcido del color del encabezado --- */
+
+/* SERVICIO (naranja suave) */
+.comparativa td:nth-child(1) input {
+  background-color: rgba(245, 130, 32, 0.15);
+  border: 1px solid rgba(245, 130, 32, 0.3);
+  border-radius: 4px;
+  padding: 4px;
+}
+
+/* GASTO ACTUAL (rojo suave) */
+.comparativa td:nth-child(2) input {
+  background-color: rgba(184, 35, 25, 0.12);
+  border: 1px solid rgba(184, 35, 25, 0.3);
+  border-radius: 4px;
+  padding: 4px;
+}
+
+/* NUEVO SERVICIO (azul suave) */
+.comparativa td:nth-child(3) input {
+  background-color: rgba(12, 74, 117, 0.12);
+  border: 1px solid rgba(12, 74, 117, 0.3);
+  border-radius: 4px;
+  padding: 4px;
+}
+
+/* NUEVO GASTO (verde suave) */
+.comparativa td:nth-child(4) input {
+  background-color: rgba(119, 178, 85, 0.15);
+  border: 1px solid rgba(119, 178, 85, 0.3);
+  border-radius: 4px;
+  padding: 4px;
+}
+
+/* Al enfocar un input, mejora la visibilidad */
+.comparativa td input:focus {
+  outline: none;
+  background-color: #fff;
+  box-shadow: 0 0 4px rgba(0,0,0,0.15);
 }
 
 
-  </style>
+    .ahorro{display:flex;align-items:center;justify-content:space-between;margin-top:20px;}
+    .ahorro .campo{flex:1;margin-right:20px;}
+    .ahorro label{color:#f58220;font-weight:bold;}
+    .ahorro input{width:100%;border:1px solid #ccc;border-radius:5px;padding:6px;}
+    .ahorro .porcentaje{font-size:48px;color:#0c4a75;font-weight:bold;text-align:center;flex:0.5;border:2px solid #dce3ea;border-radius:8px;padding:10px;background:#f9fbfc;}
+    .botones-comp{margin-top:15px;display:flex;justify-content:flex-end;gap:10px;}
+ /* ----------- RESPONSIVE DESIGN ----------- */
+
+/* 📏 Tablets y pantallas medianas */
+@media (max-width: 992px) {
+  .form-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-left, .form-right {
+    width: 100%;
+  }
+
+  .form-right {
+    margin-top: 15px;
+    padding: 15px;
+  }
+
+  .comercial {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .comercial-img {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .comercial-info input {
+    width: 100%;
+  }
+
+  .footer-container {
+    flex-direction: column;
+  }
+
+  .costes-box {
+    grid-template-columns: 1fr;
+  }
+
+  .firma-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .firma-sello {
+    width: 100%;
+  }
+}
+
+/* 📱 Móviles */
+@media (max-width: 600px) {
+  body {
+    font-size: 13px;
+  }
+
+  .container, .page2, .comparativa, .footer-section {
+    width: 95%;
+    margin: 15px auto;
+    padding: 15px;
+  }
+
+  table th, table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .fecha-oferta {
+    justify-content: center;
+    padding-right: 0;
+  }
+
+  .fecha-oferta label {
+    font-size: 13px;
+  }
+
+  .fecha-oferta input[type="date"] {
+    width: 140px;
+  }
+
+  .botones, .botones-comp {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .botones button, .botones-comp button {
+    width: 100%;
+    font-size: 13px;
+  }
+
+  .ahorro {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .porcentaje {
+    font-size: 36px;
+    width: 100%;
+  }
+}
+
+
+
+/* --- SECCIÓN FINAL DE ACCIONES --- */
+.acciones-finales {
+  max-width: 850px;
+  width: 100%;
+  background: #f9fbfc;
+  margin: 60px auto;
+  padding: 25px 30px;
+  border: 2px solid #dce3ea;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* 🔽 Fuerza espacio visual debajo del bloque */
+body::after {
+  content: "";
+  display: block;
+  height: 100px; /* margen visual inferior real */
+}
+
+.acciones-finales textarea {
+  width: 100%;
+  height: 100px;
+  margin: 15px 0 25px;
+  border: 1.5px solid #cdd5df;
+  border-radius: 8px;
+  padding: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  color: #333;
+  resize: vertical;
+  background: #fff;
+}
+
+.botones-finales {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.btn-final {
+  padding: 10px 25px;
+  font-size: 15px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #fff;
+  transition: opacity 0.2s ease;
+}
+
+.btn-final:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-final.verde { background: #77b255; }
+.btn-final.azul { background: #0c4a75; }
+.btn-final.rojo { background: #b82319; }
+
+
+/* --- COMPATIBILIDAD UNIVERSAL Y MOVIL --- */
+html, body {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: 100%;
+  box-sizing: border-box;
+}
+
+/* Evita zoom en inputs en iPhone/iPad */
+@supports (-webkit-touch-callout: none) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Añade espacio inferior real para evitar que quede pegado al final */
+body::after {
+  content: "";
+  display: block;
+  height: 120px;
+}
+
+/* --- 🧩 OPTIMIZACIÓN TOTAL PARA MÓVILES --- */
+@media (max-width: 768px) {
+  html, body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Todos los contenedores principales ocupan todo el ancho */
+  .container, .page2, .comparativa, .footer-section, .acciones-finales, .comercial {
+    max-width: 100%;
+    width: 95%;
+    margin: 15px auto;
+    padding: 15px;
+    box-shadow: none;
+    border-radius: 8px;
+  }
+
+  /* Quita anchuras fijas */
+  .comercial {
+    flex-direction: column;
+    align-items: center;
+    width: 95%;
+  }
+
+  .comercial-img {
+    width: 80px;
+    height: 80px;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .form-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-left, .form-right {
+    width: 100%;
+  }
+
+  .form-right {
+    margin-top: 10px;
+    padding: 15px;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    font-size: 13px;
+  }
+
+  th, td {
+    padding: 6px;
+  }
+
+  .ahorro {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .porcentaje {
+    font-size: 36px;
+    width: 100%;
+  }
+
+  .botones, .botones-comp, .botones-finales {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .botones button, .botones-comp button, .botones-finales button {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  /* Ajusta márgenes del final */
+  body::after {
+    height: 80px;
+  }
+}
+/* --- Corrección de colores del pie de tabla --- */
+#tablaServicios tfoot td {
+  background: none;
+  border-top: 1px solid #cdd5df;
+}
+
+#totalPBX, #totalOtros, #totalGeneral {
+  font-weight: bold;
+  text-align: right;
+  padding: 6px 8px;
+  font-size: 0.9rem;
+}
+
+#totalPBX {
+  background: #e9f0fa;      /* azul muy claro */
+  color: #0c4a75;
+}
+
+#totalOtros {
+  background: #f0f0f0;      /* gris claro para contrastar */
+  color: #f58220;
+}
+
+#totalGeneral {
+  background: #0c4a75;      /* azul oscuro */
+  color: rgb(0, 0, 0);
+}
+
+/* 🔹 Quitar márgenes entre cuadros */
+section,
+div.card,
+div.contenedor-seccion,
+div.page1 > div,
+div.page2 > div {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* 🔧 Mantener aire interno agradable */
+.card,
+.contenedor-seccion {
+  padding: 15px 20px !important;   /* reduce si antes era 25-30px */
+}
+
+/* 🔧 Separación más ligera entre grupos de campos */
+fieldset, .form-group, .row {
+  margin-bottom: 8px !important;   /* reduce altura entre inputs */
+}
+
+/* 🔧 Visual: línea sutil entre bloques (opcional) */
+section + section,
+.card + .card {
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+
+/* 🔹 Eliminar márgenes verticales entre cuadros */
+.container,
+.page2,
+.footer-section,
+.comparativa {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* 🔹 Si quieres que queden completamente pegados sin separación */
+.comercial + .page2,
+.page2 + .footer-section,
+.footer-section + .comparativa {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+/* ✅ Ajuste final de separación entre cuadros (alineado visualmente) */
+.container,
+.page2,
+.footer-section,
+.comparativa,
+.comercial {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* 🔹 Evitar que las sombras o bordes se superpongan visualmente */
+.container,
+.comercial,
+.page2,
+.footer-section,
+.comparativa {
+  position: relative;
+  top: 0;
+}
+
+/* 🔹 Añadir un margen controlado de 5px entre bloques (ajustable) */
+.comercial {
+  margin-top: -5px !important; /* sube un poco el bloque comercial */
+}
+
+.page2 {
+  margin-top: -10px !important; /* acerca la tabla */
+}
+
+
+/* 🔹 Asegura que no haya “colisión visual” entre bordes redondeados */
+.container,
+.page2,
+.comercial,
+.footer-section,
+.comparativa {
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+}
+/* 🔹 Espacio interno dentro del bloque de servicios */
+.page2 {
+  padding-top: 30px !important; /* espacio blanco interno arriba */
+}
+
+/* 🔹 Evita que la tabla se pegue al borde superior */
+.page2 table {
+  margin-top: 25px !important; /* separa visualmente la tabla del borde */
+}
+
+
+ </style>
 </head>
 <body>
+<form onsubmit="return false;">
 
-  <!-- CABECERA -->
-  <div class="cabecera">
-    <img src="cabezera.png" alt="Cabecera Telekos">
-
-    <div class="switch-container">
-      <span class="switch-label">Modo oscuro</span>
-      <label class="switch">
-        <input type="checkbox" id="modoOscuro">
-        <span class="slider"></span>
-      </label>
-    </div>
-  </div>
-
-  <!-- CONTENIDO PRINCIPAL -->
-  <div id="pantallaPropuesta">
-    <div class="oferta">
-      <h1>Propuesta Comercial</h1>
-      <p><strong>Fecha:</strong> <span>30/10/2025</span></p>
-      <p><strong>Empresa:</strong> <span>Cliente Ejemplo S.L.</span></p>
-
-      <h2>Servicios incluidos</h2>
-      <h3>PACK PBX (CENTRALITA)</h3>
-      <table>
-        <thead><tr><th>Servicio</th><th>Cantidad</th><th>Coste Unitario</th><th>Total</th></tr></thead>
-        <tbody><tr><td>Extensiones</td><td>5</td><td>5.00€</td><td>25.00€</td></tr></tbody>
-        <tfoot><tr class="total-row"><td colspan="3">TOTAL PBX</td><td>25.00€</td></tr></tfoot>
-      </table>
-
-      <h3>OTROS SERVICIOS</h3>
-      <table>
-        <thead><tr><th>Servicio</th><th>Cantidad</th><th>Coste Unitario</th><th>Total</th></tr></thead>
-        <tbody><tr><td>TKM Fibra Plus</td><td>1</td><td>44.00€</td><td>44.00€</td></tr></tbody>
-        <tfoot><tr class="total-row"><td colspan="3">TOTAL OTROS</td><td>44.00€</td></tr></tfoot>
-      </table>
-
-      <div class="general-total">TOTAL GENERAL: <span>69.00€</span></div>
-    </div>
-
-    <aside class="panel-derecho">
-      <h2>Revisión / Comentarios</h2>
-      <textarea id="comentario" placeholder="Escribe observaciones o motivos de revisión..."></textarea>
-    </aside>
-
-    <div class="contenedor-botones">
-      <button id="btnDescargar">📄 Descargar PDF</button>
-      <button id="btnAceptar">✅ Aceptar</button>
-      <button id="btnRevisar" disabled>🔄 Revisar</button>
-      <button id="btnRechazar">❌ Rechazar</button>
-    </div>
-  </div>
-
-  <!-- RESULTADO -->
-  <div id="pantallaResultado" class="resultado">
-    <h1 id="tituloResultado"></h1>
-    <p id="mensajeResultado"></p>
-    <button id="volver">🔙 Volver a la Propuesta</button>
-  </div>
-
-  <script>
-    const comentario = document.getElementById("comentario");
-    const btnAceptar = document.getElementById("btnAceptar");
-    const btnRevisar = document.getElementById("btnRevisar");
-    const btnRechazar = document.getElementById("btnRechazar");
-    const pantallaPropuesta = document.getElementById("pantallaPropuesta");
-    const pantallaResultado = document.getElementById("pantallaResultado");
-
-    comentario.addEventListener("input", () => {
-      const texto = comentario.value.trim();
-      btnRevisar.disabled = texto.length === 0;
-      btnAceptar.disabled = texto.length > 0;
-    });
-
-    document.getElementById("btnDescargar").addEventListener("click", () => window.print());
-
-    function mostrarResultado(estado) {
-      pantallaPropuesta.style.display = "none";
-      pantallaResultado.style.display = "block";
-      const titulo = document.getElementById("tituloResultado");
-      const mensaje = document.getElementById("mensajeResultado");
-
-      if (estado === "aceptada") {
-        titulo.textContent = "✅ Propuesta Aceptada";
-        titulo.className = "aceptada";
-        mensaje.textContent = "Gracias. La propuesta ha sido aceptada correctamente.";
-      } else if (estado === "revisar") {
-        titulo.textContent = "🔄 Propuesta Enviada a Revisión";
-        titulo.className = "revisar";
-        mensaje.textContent = "Tu comentario ha sido enviado para revisión del comercial.";
-      } else if (estado === "rechazada") {
-        titulo.textContent = "❌ Propuesta Rechazada";
-        titulo.className = "rechazada";
-        mensaje.textContent = "La propuesta ha sido rechazada. Nos pondremos en contacto contigo.";
-      }
-    }
-
-    btnAceptar.addEventListener("click", () => mostrarResultado("aceptada"));
-    btnRevisar.addEventListener("click", () => {
-      if (comentario.value.trim()) mostrarResultado("revisar");
-      else alert("⚠️ Debes escribir un comentario para revisar.");
-    });
-    btnRechazar.addEventListener("click", () => mostrarResultado("rechazada"));
-
-    document.getElementById("volver").addEventListener("click", () => {
-      pantallaResultado.style.display = "none";
-      pantallaPropuesta.style.display = "block";
-      comentario.value = "";
-      btnRevisar.disabled = true;
-      btnAceptar.disabled = false;
-    });
-
-    // 🌙 MODO OSCURO CON PERSISTENCIA
-    const switchOscuro = document.getElementById("modoOscuro");
-    const guardado = localStorage.getItem("modoOscuro") === "true";
-    if (guardado) {
-      document.body.classList.add("dark");
-      switchOscuro.checked = true;
-    }
-
-    switchOscuro.addEventListener("change", () => {
-      document.body.classList.toggle("dark", switchOscuro.checked);
-      localStorage.setItem("modoOscuro", switchOscuro.checked);
-    });
-
-// === CARGAR DATOS GUARDADOS DESDE LA OFERTA ===
-document.addEventListener("DOMContentLoaded", () => {
-  const datos = JSON.parse(localStorage.getItem("ofertaTelekos") || "{}");
-
-  if (datos.empresa) {
-    document.querySelector(".oferta span").textContent = datos.empresa;
-  }
-
-  if (datos.fecha) {
-    document.querySelector(".oferta p span").textContent = datos.fecha;
-  }
-
-  // Insertar tabla comparativa si corresponde
-  if (datos.mostrarComparativa && datos.comparativa?.length > 0) {
-    const divComparativa = document.createElement("div");
-    divComparativa.className = "oferta comparativa-cliente";
-    divComparativa.innerHTML = `
-      <h2>Comparativa de Ahorro</h2>
-      <table>
-        <thead>
-          <tr>
-            <th style="background:#f58220;color:white;">Servicio Actual</th>
-            <th style="background:#b82319;color:white;">Gasto Actual (€)</th>
-            <th style="background:#0c4a75;color:white;">Nuevo Servicio</th>
-            <th style="background:#77b255;color:white;">Nuevo Gasto (€)</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${datos.comparativa
-            .map(c => `
-              <tr>
-                <td>${c.servicioActual || "-"}</td>
-                <td>${parseFloat(c.gastoActual || 0).toFixed(2)}</td>
-                <td>${c.nuevoServicio || "-"}</td>
-                <td>${parseFloat(c.nuevoGasto || 0).toFixed(2)}</td>
-              </tr>
-            `)
-            .join("")}
-        </tbody>
-      </table>
-
-      <div class="general-total" style="margin-top:15px;">
-        <strong>Ahorro mensual:</strong> ${datos.ahorroMensual || "0.00"} €<br>
-        <strong>Ahorro anual:</strong> ${datos.ahorroAnual || "0.00"} €<br>
-        <strong>Porcentaje de ahorro:</strong> ${datos.porcentajeAhorro || "0%"}
+  <!-- PÁGINA 1 -->
+  <div class="container">
+    <header>
+      <h2>SERVICIOS</h2><br>
+      <p>Centralita en la nube • SMS masivo • Telefonía con operadores
+    <br><br>Formulario de OFERTA
+      </p>
+      <div class="logos">
       </div>
-    `;
-    document.querySelector("#pantallaPropuesta").insertBefore(divComparativa, document.querySelector(".panel-derecho"));
+    </header>
+
+    <div class="form-section">
+      <div class="form-left">
+        <!-- FECHA DE LA OFERTA -->
+<div class="fecha-oferta">
+  <label>FECHA DE LA OFERTA:</label>
+  <input type="date" id="fechaOferta">
+</div>
+
+        <h3><span style="color:#f58220;">PROPUESTA DE SERVICIO</h3>
+     <label>NOMBRE DE LA EMPRESA:</label>
+<input type="text" id="nombreEmpresa" >
+  
+      <!-- 🏠 DIRECCIÓN COMPLETA -->
+<div class="direccion-box" style="margin-top:20px; background:#f9fbfc; padding:15px; border:1px solid #dce3ea; border-radius:8px;">
+  <h4 style="color:#0c4a75; margin-bottom:10px;">Dirección del Cliente</h4>
+
+  <div style="display:flex; gap:10px; flex-wrap:wrap;">
+    <div style="flex:1 1 200px;">
+      <label style="color:#0c4a75; font-weight:bold;">Tipo de vía:</label>
+      <select id="tipoVia" name="tipoVia" style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+        <option value="">Selecciona tipo de vía:</option>
+        <option>Arroyo</option>
+        <option>Avenida</option>
+        <option>Barrio</option>
+        <option>Bulevar</option>
+        <option>Calle</option>
+        <option>Callejón</option>
+        <option>Camino</option>
+        <option>Camino alto</option>
+        <option>Camino bajo</option>
+        <option>Camino viejo</option>
+        <option>Campillo</option>
+        <option>Carrera</option>
+        <option>Carretera</option>
+        <option>Cerrillo</option>
+        <option>Costanilla</option>
+        <option>Cuesta</option>
+        <option>Ensanche</option>
+        <option>Extrarradio</option>
+        <option>Glorieta</option>
+        <option>Interior</option>
+        <option>Pasadizo</option>
+        <option>Pasaje</option>
+        <option>Paseo</option>
+        <option>Paseo alto</option>
+        <option>Paseo bajo</option>
+        <option>Plaza</option>
+        <option>Pradera</option>
+        <option>Pretíl</option>
+        <option>Puente</option>
+        <option>Punto kilométrico</option>
+        <option>Rambla</option>
+        <option>Ribera</option>
+        <option>Ronda</option>
+        <option>Street</option>
+        <option>Travesía</option>
+        <option>Vereda</option>
+      </select>
+    </div>
+
+    <div style="flex:2 1 300px;">
+      <label style="color:#0c4a75; font-weight:bold;">Nombre de la Calle:</label>
+      <input type="text" id="nombreVia"  style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+    </div>
+
+    <div style="flex:0.5 1 100px;">
+      <label style="color:#0c4a75; font-weight:bold;">Nº:</label>
+      <input type="text" id="numero"  style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+    </div>
+
+    <div style="flex:0.5 1 100px;">
+      <label style="color:#0c4a75; font-weight:bold;">Piso:</label>
+      <input type="text" id="piso"  style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+    </div>
+
+    <div style="flex:0.5 1 120px;">
+      <label style="color:#0c4a75; font-weight:bold;">Puerta:</label>
+      <input type="text" id="puerta"  style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+    </div>
+
+    <div style="flex:0.5 1 120px;">
+      <label style="color:#0c4a75; font-weight:bold;">Bloque:</label>
+      <input type="text" id="bloque"  style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+    </div>
+
+    <div style="flex:0.5 1 120px;">
+      <label style="color:#0c4a75; font-weight:bold;">Escalera:</label>
+      <input type="text" id="escalera"  style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+    </div>
+
+    <div style="flex:1 1 200px;">
+      <label style="color:#0c4a75; font-weight:bold;">Municipio:</label>
+      <input type="text" id="municipio"  style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+    </div>
+
+    <div style="flex:1 1 150px;">
+      <label style="color:#0c4a75; font-weight:bold;">Provincia:</label>
+      <input type="text" id="provincia"  style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+    </div>
+
+    <div style="flex:1 1 150px;">
+      <label style="color:#0c4a75; font-weight:bold;">C.P.:</label>
+      <input type="text" id="codigoPostal" style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+    </div>
+
+    <div style="flex:1 1 150px;">
+      <label style="color:#0c4a75; font-weight:bold;">CCAA:</label>
+      <input type="text" id="ccaa"  style="width:100%; padding:6px; border:1px solid #cdd5df; border-radius:4px;">
+    </div>
+  </div>
+
+  
+</div>
+
+       <label>NIF/CIF/NIE:</label><input type="text" />
+        <label>TELÉFONO:</label><input type="text" />
+        <label>EMAIL:</label><input type="email" />
+      </div>
+      <div class="form-right">
+        <img src="">
+        <a href="https://www.telekos.com"></a>
+      </div>
+    </div>
+  </div>
+
+<div class="comercial">
+  <div class="comercial-img"></div>
+  <div class="comercial-info">
+    <h4>SU COMERCIAL</h4>
+
+    <label>NOMBRE Y APELLIDOS:</label>
+    <input type="text" placeholder="Escribe el nombre...">
+
+    <label>TELÉFONO MÓVIL:</label>
+    <input type="text" placeholder="Ej: 600 123 456">
+
+    <label>EMAIL:</label>
+    <input type="email" placeholder="nombre@empresa.com">
+
+    <label>TELÉFONO FIJO:</label>
+     <input type="number" placeholder="91 088 50 50">
+
+  </div>
+</div>
+
+ <!-- PÁGINA 2 -->
+<div class="page2">
+  <table id="tablaServicios">
+    <thead>
+      <tr>
+        <th>SERVICIO</th>
+        <th>CANT.</th>
+        <th>COSTE MENSUAL (€)</th>
+        <th>TOTAL (€)</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr>
+        <td>
+          <select class="servicioSelect">
+            <option value="">-- Selecciona un servicio --</option>
+            <option value="5">Numeraciones</option>
+            <option value="5">Extensiones</option>
+            <option value="2">Canales</option>
+            <option value="5">Hardware</option>
+            <option value="5">Software</option>
+            <option value="19">TP 100 Nac</option>
+            <option value="25">TP 200 Nac</option>
+            <option value="32">TP 500 Nac</option>
+            <option value="49">TP 1000 Nac</option>
+            <option value="79">TP 2000 Nac</option>
+            <option value="34">TKM Fibra</option>
+            <option value="44">TKM Fibra Plus</option>
+            <option value="54">TKM Fibra Premium</option>
+            <option value="12">TKM Backup</option>
+            <option value="4.92">TKM Movil 10 Gb</option>
+            <option value="6.57">TKM Movil 40 Gb</option>
+            <option value="8.22">TKM Movil 100 Gb</option>
+            <option value="10.7">TKM Movil 250 Gb</option>
+            <option value="16.49">TKM Movil Gb Ilimitados</option>
+            <option value="24.95">TKL Fibra 600</option>
+            <option value="24.95">TKL Fibra 1 Gb</option>
+            <option value="1.28">TKL M2M 500 Mb</option>
+            <option value="2.11">TKL M2M 2 Gb</option>
+            <option value="2.93">TKL M2M 3 Gb + 150 Min</option>
+            <option value="4.26">TKL Movil 5 Gb</option>
+            <option value="6.74">TKL Movil 30 Gb acumulables</option>
+            <option value="7.57">TKL Movil 60 Gb acumulables</option>
+            <option value="9.22">TKL Movil 80 Gb acumulables</option>
+            <option value="10.05">TKL Movil 120 Gb acumulables</option>
+            <option value="13.36">TKM Movil 400 Gb</option>
+            <option value="17.49">TKL Movil 600 Gb</option>
+            <option value="21.62">TKL Movil Gb Ilimitados</option>
+          </select>
+        </td>
+        <td><input type="number" min="0" class="cantidad" placeholder=" "></td>
+
+        <td><input type="number" min="0" step="0.01" class="coste" placeholder="0.00"></td>
+        <td class="total">0.00</td>
+      </tr>
+    </tbody>
+    <tfoot>
+  <tr>
+    <td colspan="3" style="text-align:right; color:#0c4a75; font-weight:bold;">
+      TOTAL CENTRALITA (PBX) (€)
+    </td>
+    <td id="totalPBX">0.00</td>
+  </tr>
+  <tr>
+    <td colspan="3" style="text-align:right; color:#f58220; font-weight:bold;">
+      TOTAL OTROS SERVICIOS (€)
+    </td>
+    <td id="totalOtros">0.00</td>
+  </tr>
+  <tr>
+    <td colspan="3" style="text-align:right; font-weight:bold;">
+      TOTAL GENERAL (€)
+    </td>
+    <td id="totalGeneral">0.00</td>
+  </tr>
+</tfoot>
+
+  </table>
+
+  <div class="botones">
+  <button class="add" id="agregarPredefinido">🧩 Agregar Servicio Predefinido</button>
+  <button class="add" id="agregarPersonalizado" style="background:#f58220;">✏️ Agregar Servicio Personalizado</button>
+  <button class="remove" id="eliminarFila">🗑️ Eliminar Último</button>
+</div>
+
+
+  <!-- PIE -->
+  <div class="footer-section">
+    <div class="footer-container">
+      <div class="observaciones-box">
+        <div class="obs-header">OBSERVACIONES</div>
+        <textarea></textarea>
+      </div>
+      <div class="costes-box">
+        <div class="coste-item naranja">COSTE MENSUAL DEL SERVICIO</div>
+        <input type="number" id="costeMensual" readonly>
+
+        <div class="coste-item azul">IVA</div>
+        <input type="number" id="ivaMensual" readonly>
+
+        <div class="coste-item azul">COSTE MENSUAL IVA INCL.</div>
+        <input type="number" id="mensualIVA" readonly>
+
+        <div class="coste-item naranja">COSTE DE INSTALACIÓN</div>
+        <input type="number" id="instalacion" placeholder="0.00">
+
+        <div class="coste-item azul">IVA</div>
+        <input type="number" id="ivaInstalacion" readonly>
+
+        <div class="coste-item azul">COSTE INSTALACIÓN IVA INCL.</div>
+        <input type="number" id="instalacionIVA" readonly>
+      </div>
+    </div>
+<!-- PIE -->
+
+
+    <div class="nota-final">
+      Los servicios facturados por Telekos no implican compromisos de permanencia ni penalizaciones asociadas a nuestros clientes.
+    </div>
+
+    <div class="firma-box">
+      <div class="firma-header">FIRMA DEL CLIENTE ACEPTANDO LA OFERTA:</div>
+      <div class="firma-container">
+        <div class="firma-datos">
+          <label>CLIENTE:</label><input type="text"><br>
+          <label>NOMBRE:</label><input type="text"><br>
+          <label>DNI:</label><input type="text">
+        </div>
+        <div class="firma-sello">FIRMA Y SELLO</div>
+      </div>
+    </div>
+
+  <!-- PIE -->
+
+
+<!-- OPCIÓN PARA MOSTRAR/OCULTAR COMPARATIVA -->
+<div style="margin:30px auto;max-width:850px;background:#f9fbfc;border:1.5px solid #cdd5df;border-radius:8px;padding:15px;">
+  <label style="color:#0c4a75;font-weight:bold;">
+    <input type="checkbox" id="mostrarComparativa" checked style="margin-right:8px;">
+    Incluir la comparativa de ahorro en la propuesta al cliente
+  </label>
+</div>
+
+  <!-- COMPARATIVA DE AHORRO -->
+  <div class="comparativa">
+    <h3 style="text-align:center;color:#0c4a75;">COMPARATIVA DE AHORRO</h3>
+    <table id="tablaAhorro">
+      <thead>
+        <tr>
+          <th colspan="2" class="orange">SERVICIO / GASTO ACTUAL</th>
+          <th colspan="2" class="blue">SERVICIO / NUEVO GASTO</th>
+        </tr>
+        <tr>
+          <th class="orange">SERVICIO</th>
+          <th class="red">GASTO ACTUAL</th>
+          <th class="blue">SERVICIO</th>
+          <th class="green">NUEVO GASTO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="text" placeholder="Servicio..."></td>
+          <td><input type="number" class="gastoActual" step="0.01"></td>
+          <td><input type="text" placeholder="Nuevo servicio..."></td>
+          <td><input type="number" class="nuevoGasto" step="0.01"></td>
+        </tr>
+      </tbody>
+    </table>
+
+<div class="botones-comp">
+  <button class="add" id="agregarAhorro">➕ Agregar Fila</button>
+  <button class="remove" id="eliminarAhorro">🗑️ Eliminar Último</button>
+</div>
+
+
+    <div class="ahorro">
+      <div class="campo">
+        <label>AHORRO MENSUAL (€):</label>
+        <input type="number" id="ahorroMensual" readonly>
+        <label>AHORRO ANUAL (€):</label>
+        <input type="number" id="ahorroAnual" readonly>
+      </div>
+      <div class="porcentaje" id="porcentajeAhorro">0%</div>
+    </div>
+  </div>
+
+  <!-- 🔸 SECCIÓN DE ACCIONES FINALES -->
+<div class="acciones-finales">
+  <h3 style="color:#0c4a75;text-align:center;">Acciones sobre la oferta</h3>
+
+  <textarea id="comentariosRevision" placeholder="Escribe tus observaciones si deseas revisar la oferta..."></textarea>
+
+  <div class="botones-finales">
+    <button id="aceptarOferta" class="btn-final verde">✅ Aceptar Oferta</button>
+    <button id="revisarOferta" class="btn-final azul" disabled>🔍 Revisar</button>
+    <button id="rechazarOferta" class="btn-final rojo">❌ Rechazar</button>
+  </div>
+</div>
+
+  </div>
+</div>
+</form>
+  <script>
+    // --- CALCULOS SERVICIOS ---
+    const tabla = document.querySelector("#tablaServicios tbody");
+    const totalGeneralEl = document.getElementById("totalGeneral");
+    const costeMensual = document.getElementById("costeMensual");
+    const ivaMensual = document.getElementById("ivaMensual");
+    const mensualIVA = document.getElementById("mensualIVA");
+    const instalacion = document.getElementById("instalacion");
+    const ivaInstalacion = document.getElementById("ivaInstalacion");
+    const instalacionIVA = document.getElementById("instalacionIVA");
+
+
+    instalacion.addEventListener("input", actualizarTotales);
+    tabla.addEventListener("input", e => {
+      if (e.target.classList.contains("cantidad") || e.target.classList.contains("coste")) actualizarTotales();
+    });
+
+// --- BOTÓN: AGREGAR SERVICIO PREDEFINIDO ---
+document.getElementById("agregarPredefinido").addEventListener("click", () => {
+  const fila = document.createElement("tr");
+  fila.innerHTML = `
+    <td>
+      <select class="servicioSelect">
+        <option value="">-- Selecciona un servicio --</option>
+        <option value="5">Numeraciones</option>
+        <option value="5">Extensiones</option>
+        <option value="2">Canales</option>
+        <option value="5">Hardware</option>
+        <option value="5">Software</option>
+        <option value="19">TP 100 Nac</option>
+        <option value="25">TP 200 Nac</option>
+        <option value="32">TP 500 Nac</option>
+        <option value="49">TP 1000 Nac</option>
+        <option value="79">TP 2000 Nac</option>
+        <option value="34">TKM Fibra</option>
+        <option value="44">TKM Fibra Plus</option>
+        <option value="54">TKM Fibra Premium</option>
+        <option value="12">TKM Backup</option>
+        <option value="4.92">TKM Movil 10 Gb</option>
+        <option value="6.57">TKM Movil 40 Gb</option>
+        <option value="8.22">TKM Movil 100 Gb</option>
+        <option value="10.7">TKM Movil 250 Gb</option>
+        <option value="16.49">TKM Movil Gb Ilimitados</option>
+        <option value="24.95">TKL Fibra 600</option>
+        <option value="24.95">TKL Fibra 1 Gb</option>
+        <option value="1.28">TKL M2M 500 Mb</option>
+        <option value="2.11">TKL M2M 2 Gb</option>
+        <option value="2.93">TKL M2M 3 Gb + 150 Min</option>
+        <option value="4.26">TKL Movil 5 Gb</option>
+        <option value="6.74">TKL Movil 30 Gb acumulables</option>
+        <option value="7.57">TKL Movil 60 Gb acumulables</option>
+        <option value="9.22">TKL Movil 80 Gb acumulables</option>
+        <option value="10.05">TKL Movil 120 Gb acumulables</option>
+        <option value="13.36">TKM Movil 400 Gb</option>
+        <option value="17.49">TKL Movil 600 Gb</option>
+        <option value="21.62">TKL Movil Gb Ilimitados</option>
+      </select>
+    </td>
+    <td><input type="number" min="0" class="cantidad" placeholder=" "></td>
+    <td><input type="number" min="0" step="0.01" class="coste" placeholder="0.00"></td>
+    <td class="total">0.00</td>`;
+  tabla.appendChild(fila);
+});
+
+// --- BOTÓN: AGREGAR SERVICIO PERSONALIZADO ---
+document.getElementById("agregarPersonalizado").addEventListener("click", (e) => {
+  e.preventDefault(); // ⛔ evita que el formulario se envíe
+  const fila = document.createElement("tr");
+  fila.innerHTML = `
+    <td><input type="text" class="servicioPersonalizado" placeholder="Escribe el servicio..."></td>
+   <td><input type="number" min="0" class="cantidad" placeholder=" "></td>
+   <td><input type="number" min="0" step="0.01" class="coste" placeholder="0.00"></td>
+    <td class="total">0.00</td>`;
+  tabla.appendChild(fila);
+});
+
+// --- BOTÓN: ELIMINAR FILA ---
+document.getElementById("eliminarFila").addEventListener("click", (e) => {
+  e.preventDefault(); // ⛔ evita recargar o enviar formulario
+  const filas = tabla.querySelectorAll("tr");
+  if (filas.length > 1) filas[filas.length - 1].remove();
+  actualizarTotales();
+});
+
+// --- AUTO RELLENO DE COSTE AL SELECCIONAR SERVICIO ---
+// --- AUTO RELLENO DE COSTE AL SELECCIONAR SERVICIO ---
+// --- AUTO RELLENO DE COSTE AL SELECCIONAR SERVICIO (COMPATIBLE CON SELECT2) ---
+$(document).on('select2:select', '.servicioSelect', function (e) {
+  const fila = this.closest("tr");
+  const costeInput = fila.querySelector(".coste");
+  const cantidadInput = fila.querySelector(".cantidad"); // ✅ nuevo
+
+  const valor = parseFloat(this.value) || 0;
+  costeInput.value = valor.toFixed(2);
+  actualizarTotales();
+
+  // ✅ Al seleccionar un servicio, enfoca automáticamente la cantidad
+  if (cantidadInput) {
+    cantidadInput.focus();
   }
 });
-// === CARGAR DATOS GUARDADOS DESDE LA OFERTA ===
-document.addEventListener("DOMContentLoaded", () => {
-  const datos = JSON.parse(localStorage.getItem("ofertaTelekos") || "{}");
 
-  if (!datos || Object.keys(datos).length === 0) return;
 
-  // 🏢 Empresa y fecha
-  const spanEmpresa = document.querySelector(".oferta p span");
-  const spanFecha = document.querySelector(".oferta p strong + span, .oferta p span");
-  if (spanEmpresa) spanEmpresa.textContent = datos.empresa || "Cliente";
-  if (spanFecha) spanFecha.textContent = datos.fecha || new Date().toLocaleDateString();
 
-  // 💰 Reemplazar tabla de servicios
-  const tablaPBX = document.querySelectorAll(".oferta table")[0];
-  const tablaOtros = document.querySelectorAll(".oferta table")[1];
-  const tbodyPBX = tablaPBX.querySelector("tbody");
-  const tbodyOtros = tablaOtros.querySelector("tbody");
+// --- ACTUALIZAR TOTAL AL CAMBIAR CANTIDAD O COSTE ---
+tabla.addEventListener("input", e => {
+  if (e.target.classList.contains("cantidad") || e.target.classList.contains("coste")) {
+    actualizarTotales();
+  }
+});
 
-  tbodyPBX.innerHTML = "";
-  tbodyOtros.innerHTML = "";
-
-  // Clasificación de servicios PBX vs Otros
-  const pbxKeywords = [
-    "numeracion", "numeraciones", "extensiones", "canal", "canales",
-    "hardware", "software", "tp 100 nac", "tp 200 nac",
-    "tp 500 nac", "tp 1000 nac", "tp 2000 nac"
-  ];
-
+// --- FUNCIÓN PRINCIPAL DE CÁLCULOS ---
+// --- FUNCIÓN PRINCIPAL DE CÁLCULOS (MEJORADA CON SUBTOTALES) ---
+function actualizarTotales() {
+  let totalGeneral = 0;
   let totalPBX = 0;
   let totalOtros = 0;
 
-  datos.servicios?.forEach(s => {
-    const total = (parseFloat(s.coste || 0) * parseFloat(s.cantidad || 0)) || 0;
-    const filaHTML = `
-      <tr>
-        <td>${s.servicio}</td>
-        <td>${s.cantidad}</td>
-        <td>${parseFloat(s.coste).toFixed(2)}€</td>
-        <td>${total.toFixed(2)}€</td>
-      </tr>
-    `;
+  // Palabras clave que identifican servicios de centralita (PBX)
+  const pbxKeywords = [
+    "numeracion", "numeraciones", "extensiones", "canal", "canales",
+    "hardware", "software",
+    "tp 100 nac", "tp 200 nac", "tp 500 nac", "tp 1000 nac", "tp 2000 nac"
+  ];
 
-    if (pbxKeywords.some(k => s.servicio.toLowerCase().includes(k))) {
-      tbodyPBX.insertAdjacentHTML("beforeend", filaHTML);
+  tabla.querySelectorAll("tr").forEach(fila => {
+    const servicioTexto =
+      fila.querySelector(".servicioSelect")?.selectedOptions[0]?.text?.toLowerCase() ||
+      fila.querySelector(".servicioPersonalizado")?.value?.toLowerCase() ||
+      "";
+
+    const cantidad = parseFloat(fila.querySelector(".cantidad")?.value) || 0;
+    const coste = parseFloat(fila.querySelector(".coste")?.value) || 0;
+    const total = cantidad * coste;
+
+    // Muestra el total de cada fila
+    fila.querySelector(".total").textContent = total.toFixed(2);
+
+    // Suma al total general
+    totalGeneral += total;
+
+    // Clasifica según el tipo de servicio
+    if (pbxKeywords.some(keyword => servicioTexto.includes(keyword))) {
       totalPBX += total;
     } else {
-      tbodyOtros.insertAdjacentHTML("beforeend", filaHTML);
       totalOtros += total;
     }
   });
 
-  // Actualizar totales en las tablas
-  tablaPBX.querySelector("tfoot td:last-child").textContent = totalPBX.toFixed(2) + "€";
-  tablaOtros.querySelector("tfoot td:last-child").textContent = totalOtros.toFixed(2) + "€";
+  // 🧮 Actualizar los totales en pantalla
+  const totalPBXEl = document.getElementById("totalPBX");
+  const totalOtrosEl = document.getElementById("totalOtros");
 
-  const totalGeneral = totalPBX + totalOtros;
+  if (totalPBXEl) totalPBXEl.textContent = totalPBX.toFixed(2);
+  if (totalOtrosEl) totalOtrosEl.textContent = totalOtros.toFixed(2);
+  totalGeneralEl.textContent = totalGeneral.toFixed(2);
 
-  // 🔹 Actualizar el TOTAL GENERAL principal
-  const totalGeneralEl = document.querySelector(".general-total span");
-  if (totalGeneralEl) totalGeneralEl.textContent = totalGeneral.toFixed(2) + "€";
-// === COMPARATIVA DE AHORRO (una sola tabla) ===
-const divAnterior = document.querySelector(".comparativa-cliente");
-if (divAnterior) divAnterior.remove(); // ✅ evita duplicados si recargas varias veces
+  // 🧾 Calcular IVA y totales
+  costeMensual.value = totalGeneral.toFixed(2);
+  const iva = totalGeneral * 0.21;
+  ivaMensual.value = iva.toFixed(2);
+  mensualIVA.value = (totalGeneral + iva).toFixed(2);
 
-if (datos.mostrarComparativa && Array.isArray(datos.comparativa) && datos.comparativa.length > 0) {
-  const divComparativa = document.createElement("div");
-  divComparativa.className = "oferta comparativa-cliente";
-  
-  let filasHTML = "";
-  datos.comparativa.forEach(c => {
-    filasHTML += `
-      <tr>
-        <td>${c.servicioActual || "-"}</td>
-        <td>${parseFloat(c.gastoActual || 0).toFixed(2)}</td>
-        <td>${c.nuevoServicio || "-"}</td>
-        <td>${parseFloat(c.nuevoGasto || 0).toFixed(2)}</td>
-      </tr>
-    `;
-  });
-
-  divComparativa.innerHTML = `
-    <h2>Comparativa de Ahorro</h2>
-    <table>
-      <thead>
-        <tr>
-          <th style="background:#f58220;color:white;">Servicio Actual</th>
-          <th style="background:#b82319;color:white;">Gasto Actual (€)</th>
-          <th style="background:#0c4a75;color:white;">Nuevo Servicio</th>
-          <th style="background:#77b255;color:white;">Nuevo Gasto (€)</th>
-        </tr>
-      </thead>
-      <tbody>${filasHTML}</tbody>
-    </table>
-
-    <div class="general-total" style="margin-top:15px;">
-      <strong>Ahorro mensual:</strong> ${datos.ahorroMensual || "0.00"} €<br>
-      <strong>Ahorro anual:</strong> ${datos.ahorroAnual || "0.00"} €<br>
-      <strong>Porcentaje de ahorro:</strong> ${datos.porcentajeAhorro || "0%"}
-    </div>
-  `;
-
-  // Inserta justo antes del panel derecho
-  document.querySelector("#pantallaPropuesta").insertBefore(
-    divComparativa,
-    document.querySelector(".panel-derecho")
-  );
+  const inst = parseFloat(instalacion.value) || 0;
+  ivaInstalacion.value = (inst * 0.21).toFixed(2);
+  instalacionIVA.value = (inst * 1.21).toFixed(2);
 }
 
 
+// --- MOSTRAR CAMPO PERSONALIZADO SI SE ELIGE OPCIÓN MANUAL ---
+tabla.addEventListener("change", e => {
+  if (e.target.classList.contains("servicioSelect")) {
+    const fila = e.target.closest("tr");
+    const inputPersonalizado = fila.querySelector(".servicioPersonalizado");
+    const costeInput = fila.querySelector(".coste");
+
+    if (e.target.value === "personalizado") {
+      inputPersonalizado.style.display = "block";
+      costeInput.value = "";
+      inputPersonalizado.focus();
+    } else {
+      inputPersonalizado.style.display = "none";
+    }
+  }
 });
 
 
-  </script>
+  // --- CALCULOS COMPARATIVA DE AHORRO ---
+const tablaAhorro = document.querySelector("#tablaAhorro tbody");
+const ahorroMensual = document.getElementById("ahorroMensual");
+const ahorroAnual = document.getElementById("ahorroAnual");
+const porcentajeAhorro = document.getElementById("porcentajeAhorro");
 
+function actualizarAhorro() {
+  let gastoActual = 0;
+  let nuevoGasto = 0;
+
+  tablaAhorro.querySelectorAll("tr").forEach(fila => {
+    const actual = parseFloat(fila.querySelector(".gastoActual")?.value) || 0;
+    const nuevo = parseFloat(fila.querySelector(".nuevoGasto")?.value) || 0;
+    gastoActual += actual;
+    nuevoGasto += nuevo;
+  });
+
+  const ahorro = gastoActual - nuevoGasto;
+  const ahorroAnualTotal = ahorro * 12;
+
+  ahorroMensual.value = ahorro.toFixed(2);
+  ahorroAnual.value = ahorroAnualTotal.toFixed(2);
+
+  const porcentaje = gastoActual > 0 ? (ahorro / gastoActual) * 100 : 0;
+  porcentajeAhorro.textContent = `${porcentaje.toFixed(1)}%`;
+}
+
+// Escucha los cambios en todos los inputs existentes o nuevos
+tablaAhorro.addEventListener("input", actualizarAhorro);
+
+// --- BOTÓN AGREGAR FILA ---
+document.getElementById("agregarAhorro").addEventListener("click", () => {
+  const fila = document.createElement("tr");
+  fila.innerHTML = `
+    <td><input type="text" placeholder="Servicio..."></td>
+    <td><input type="number" class="gastoActual" step="0.01" placeholder="0.00"></td>
+    <td><input type="text" placeholder="Nuevo servicio..."></td>
+    <td><input type="number" class="nuevoGasto" step="0.01" placeholder="0.00"></td>`;
+  tablaAhorro.appendChild(fila);
+
+  // Asegurar que las nuevas filas también actualicen el ahorro
+  fila.querySelectorAll("input").forEach(input => {
+    input.addEventListener("input", actualizarAhorro);
+  });
+});
+
+// --- BOTÓN ELIMINAR FILA ---
+document.getElementById("eliminarAhorro").addEventListener("click", () => {
+  const filas = tablaAhorro.querySelectorAll("tr");
+  if (filas.length > 1) filas[filas.length - 1].remove();
+  actualizarAhorro();
+});
+
+// --- ACTIVAR BUSCADOR DENTRO DE CADA SELECT DE SERVICIOS --- //
+$(document).ready(function() {
+  // Función para aplicar Select2 a todos los selects existentes
+  function activarSelect2() {
+    $('.servicioSelect').select2({
+      placeholder: "-- Selecciona un servicio --",
+      width: '100%',
+      language: {
+        noResults: function() {
+          return "Sin coincidencias";
+        }
+      }
+    });
+  }
+
+  // Activar al cargar la página
+  activarSelect2();
+
+  // Reaplicar automáticamente cuando se agreguen nuevas filas
+  const observer = new MutationObserver(() => activarSelect2());
+  observer.observe(document.querySelector("#tablaServicios tbody"), { childList: true });
+});
+// --- CONTROL DE BOTONES FINALES ---
+// ✅ Verificar cantidades antes de enviar o cambiar de vista
+
+function verificarAntesDeAccion(e) {
+  let valido = true;
+
+  document.querySelectorAll("#tablaServicios tbody tr").forEach(fila => {
+    const select = fila.querySelector(".servicioSelect");
+    const personalizado = fila.querySelector(".servicioPersonalizado");
+    const cantidad = fila.querySelector(".cantidad");
+
+    // limpiar cualquier mensaje anterior
+    cantidad.setCustomValidity("");
+
+    // detectar si hay un servicio seleccionado o escrito
+    const tieneServicio =
+      (select && select.value !== "") ||
+      (personalizado && personalizado.value.trim() !== "");
+
+    // ✅ Solo validar cantidad si hay servicio elegido
+    if (tieneServicio) {
+      if (cantidad.value.trim() === "" || parseFloat(cantidad.value) <= 0) {
+        cantidad.setCustomValidity("Por favor, introduce una cantidad válida");
+        cantidad.reportValidity();
+        cantidad.focus();
+        valido = false;
+      }
+    } else {
+      // si no hay servicio, no se valida nada
+      cantidad.setCustomValidity("");
+    }
+  });
+
+  return valido;
+}
+
+const comentarios = document.getElementById("comentariosRevision");
+const btnRevisar = document.getElementById("revisarOferta");
+const btnRechazar = document.getElementById("rechazarOferta");
+const btnAceptar = document.getElementById("aceptarOferta");
+
+
+// Solo habilitar "Revisar" si hay texto
+comentarios.addEventListener("input", () => {
+  const hayTexto = comentarios.value.trim().length > 0;
+  btnRevisar.disabled = !hayTexto;
+});
+
+// --- Detectar si estamos en GitHub Pages o local ---
+const isGithub = window.location.hostname.includes("github.io");
+const basePath = isGithub ? "/prueba/" : "./";
+
+// --- BOTONES FINALES CON VALIDACIÓN DE CANTIDADES ---
+
+// ✅ Aceptar oferta
+btnAceptar.addEventListener("click", (e) => {
+  if (!verificarAntesDeAccion(e)) return;  // Verifica antes de continuar
+  e.preventDefault();
+  window.location.href = `${basePath}resultado.html?estado=aceptada`;
+});
+
+// 🔍 Revisar oferta
+btnRevisar.addEventListener("click", (e) => {
+  if (!verificarAntesDeAccion(e)) return;  // Verifica antes de continuar
+  e.preventDefault();
+  const texto = comentarios.value.trim();
+  if (texto) {
+    window.location.href = `${basePath}resultado.html?estado=revisar`;
+  }
+});
+
+// ❌ Rechazar oferta
+btnRechazar.addEventListener("click", (e) => {
+  if (!verificarAntesDeAccion(e)) return;  // Verifica antes de continuar
+  e.preventDefault();
+  window.location.href = `${basePath}resultado.html?estado=rechazada`;
+});
+
+
+// NUEVO: vista cliente
+const btnVistaCliente = document.createElement("button");
+btnVistaCliente.textContent = "👁️ Vista Cliente";
+btnVistaCliente.className = "btn-final azul";
+document.querySelector(".botones-finales").appendChild(btnVistaCliente);
+
+// --- GUARDAR OFERTA EN LOCALSTORAGE Y ABRIR VISTA CLIENTE ---
+btnVistaCliente.addEventListener("click", (e) => {
+  if (!verificarAntesDeAccion(e)) return;  // ⚠️ Verifica cantidades antes de continuar
+  e.preventDefault();
+
+  // Crear objeto con los datos del formulario
+  const datos = {
+    fecha: document.getElementById("fechaOferta").value,
+    empresa: document.getElementById("nombreEmpresa")?.value || "",
+    comercial: {
+      nombre: document.querySelector('.comercial-info input[placeholder="Escribe el nombre..."]')?.value || "",
+      movil: document.querySelector('.comercial-info input[placeholder="Ej: 600 123 456"]')?.value || "",
+      email: document.querySelector('.comercial-info input[placeholder="nombre@empresa.com"]')?.value || "",
+      fijo: document.querySelector('.comercial-info input[placeholder="91 088 50 50"]')?.value || ""
+    },
+    observaciones: document.querySelector(".observaciones-box textarea")?.value || "",
+    totalMensualIVA: document.getElementById("mensualIVA")?.value || "",
+    instalacionIVA: document.getElementById("instalacionIVA")?.value || "",
+    mostrarComparativa: document.getElementById("mostrarComparativa").checked,
+    servicios: []
+  };
+
+  // Guardar lista de servicios
+  document.querySelectorAll("#tablaServicios tbody tr").forEach(tr => {
+    const servicio =
+      tr.querySelector(".servicioSelect")?.selectedOptions[0]?.text ||
+      tr.querySelector(".servicioPersonalizado")?.value ||
+      "";
+    const cantidad = tr.querySelector(".cantidad")?.value || "";
+    const coste = tr.querySelector(".coste")?.value || "";
+    if (servicio) datos.servicios.push({ servicio, cantidad, coste });
+  });
+
+  // ✅ Guardar datos de la comparativa de ahorro
+  const comparativaFilas = document.querySelectorAll("#tablaAhorro tbody tr");
+  datos.comparativa = [];
+
+  comparativaFilas.forEach(tr => {
+    const servicioActual = tr.querySelector("td:nth-child(1) input")?.value || "";
+    const gastoActual = tr.querySelector(".gastoActual")?.value || "";
+    const nuevoServicio = tr.querySelector("td:nth-child(3) input")?.value || "";
+    const nuevoGasto = tr.querySelector(".nuevoGasto")?.value || "";
+
+    if (servicioActual || nuevoServicio) {
+      datos.comparativa.push({
+        servicioActual,
+        gastoActual,
+        nuevoServicio,
+        nuevoGasto
+      });
+    }
+  });
+
+  // ✅ Guardar totales de ahorro
+  datos.ahorroMensual = document.getElementById("ahorroMensual")?.value || "";
+  datos.ahorroAnual = document.getElementById("ahorroAnual")?.value || "";
+  datos.porcentajeAhorro = document.getElementById("porcentajeAhorro")?.textContent || "";
+
+  // Guardar en localStorage y abrir la vista cliente
+  localStorage.setItem("ofertaTelekos", JSON.stringify(datos));
+  window.open("propuesta-cliente.html", "_blank");
+});
+
+
+
+// 🔠 Convertir automáticamente a MAYÚSCULAS el campo "Nombre de la empresa"
+const campoNombreEmpresa = document.getElementById("nombreEmpresa");
+if (campoNombreEmpresa) {
+  campoNombreEmpresa.addEventListener("input", (e) => {
+    e.target.value = e.target.value.toUpperCase();
+  });
+}
+
+// 🚨 Validar que TODAS las cantidades estén rellenas antes de calcular
+function validarCantidades() {
+  let valido = true;
+
+  tabla.querySelectorAll(".cantidad").forEach(input => {
+    if (input.value.trim() === "" || parseFloat(input.value) <= 0) {
+      valido = false;
+      input.style.border = "2px solid #f58220"; // borde naranja de aviso
+      input.style.backgroundColor = "#fff4ec";  // fondo crema
+    } else {
+      input.style.border = "1px solid #cdd5df"; // normal
+      input.style.backgroundColor = "white";
+    }
+  });
+
+  return valido;
+}
+
+// 🚨 Si alguien borra una cantidad, la marca en naranja y no deja calcular
+function validarCantidades() {
+  let valido = true;
+
+  tabla.querySelectorAll(".cantidad").forEach(input => {
+    if (input.value.trim() === "" || parseFloat(input.value) <= 0) {
+      valido = false;
+      input.style.border = "2px solid #f58220";
+      input.style.backgroundColor = "#fff4ec";
+    } else {
+      input.style.border = "1px solid #cdd5df";
+      input.style.backgroundColor = "white";
+    }
+  });
+
+  return valido;
+}
+
+
+
+  </script>
 </body>
 </html>
