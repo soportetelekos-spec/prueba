@@ -388,8 +388,9 @@
   <div id="pantallaPropuesta">
     <div class="oferta">
       <h1>Propuesta Comercial</h1>
-      <p><strong>Fecha:</strong> <span>30/10/2025</span></p>
-      <p><strong>Empresa:</strong> <span></span></p>
+      <p><strong>Fecha:</strong> <span id="fechaPropuesta">--/--/----</span></p>
+<p><strong>Empresa:</strong> <span id="empresaPropuesta"></span></p>
+
 
       <h2>Servicios incluidos</h2>
       <h3>PACK PBX (CENTRALITA)</h3>
@@ -498,63 +499,42 @@
 document.addEventListener("DOMContentLoaded", () => {
   const datos = JSON.parse(localStorage.getItem("ofertaTelekos") || "{}");
 
-  if (datos.empresa) {
-    document.querySelector(".oferta span").textContent = datos.empresa;
-  }
-
-  if (datos.fecha) {
-    document.querySelector(".oferta p span").textContent = datos.fecha;
-  }
-
-  // Insertar tabla comparativa si corresponde
-  if (datos.mostrarComparativa && datos.comparativa?.length > 0) {
-    const divComparativa = document.createElement("div");
-    divComparativa.className = "oferta comparativa-cliente";
-    divComparativa.innerHTML = `
-      <h2>Comparativa de Ahorro</h2>
-      <table>
-        <thead>
-          <tr>
-            <th style="background:#f58220;color:white;">Servicio Actual</th>
-            <th style="background:#b82319;color:white;">Gasto Actual (€)</th>
-            <th style="background:#0c4a75;color:white;">Nuevo Servicio</th>
-            <th style="background:#77b255;color:white;">Nuevo Gasto (€)</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${datos.comparativa
-            .map(c => `
-              <tr>
-                <td>${c.servicioActual || "-"}</td>
-                <td>${parseFloat(c.gastoActual || 0).toFixed(2)}</td>
-                <td>${c.nuevoServicio || "-"}</td>
-                <td>${parseFloat(c.nuevoGasto || 0).toFixed(2)}</td>
-              </tr>
-            `)
-            .join("")}
-        </tbody>
-      </table>
-
-      <div class="general-total" style="margin-top:15px;">
-        <strong>Ahorro mensual:</strong> ${datos.ahorroMensual || "0.00"} €<br>
-        <strong>Ahorro anual:</strong> ${datos.ahorroAnual || "0.00"} €<br>
-        <strong>Porcentaje de ahorro:</strong> ${datos.porcentajeAhorro || "0%"}
-      </div>
-    `;
-    document.querySelector("#pantallaPropuesta").insertBefore(divComparativa, document.querySelector(".panel-derecho"));
-  }
-});
-// === CARGAR DATOS GUARDADOS DESDE LA OFERTA ===
-document.addEventListener("DOMContentLoaded", () => {
-  const datos = JSON.parse(localStorage.getItem("ofertaTelekos") || "{}");
-
   if (!datos || Object.keys(datos).length === 0) return;
 
-  // 🏢 Empresa y fecha
-  const spanEmpresa = document.querySelector(".oferta p span");
-  const spanFecha = document.querySelector(".oferta p strong + span, .oferta p span");
-  if (spanEmpresa) spanEmpresa.textContent = datos.empresa || "Cliente";
-  if (spanFecha) spanFecha.textContent = datos.fecha || new Date().toLocaleDateString();
+// 🗓️ Fecha y empresa
+const fechaEl = document.getElementById("fechaPropuesta");
+const empresaEl = document.getElementById("empresaPropuesta");
+
+if (fechaEl) {
+  fechaEl.textContent = datos.fecha || new Date().toLocaleDateString("es-ES");
+}
+
+if (empresaEl) {
+  empresaEl.textContent = datos.empresa?.trim() || "Cliente";
+}
+
+// 💼 Datos del comercial (si existen)
+if (datos.comercial && datos.comercial.nombre) {
+  const infoComercial = `
+    <div style="
+      margin-top:8px;
+      font-size:14px;
+      color:#444;
+      line-height:1.5;
+      background:#f9fbfc;
+      border-left:3px solid #f58220;
+      padding:8px 10px;
+      border-radius:6px;
+      max-width:400px;
+    ">
+      <strong>Comercial:</strong> ${datos.comercial.nombre}<br>
+      ${datos.comercial.movil ? `<strong>Móvil:</strong> ${datos.comercial.movil}<br>` : ""}
+      ${datos.comercial.fijo ? `<strong>Fijo:</strong> ${datos.comercial.fijo}<br>` : ""}
+      ${datos.comercial.email ? `<strong>Email:</strong> ${datos.comercial.email}` : ""}
+    </div>
+  `;
+  empresaEl.insertAdjacentHTML("afterend", infoComercial);
+}
 
   // 💰 Reemplazar tabla de servicios
   const tablaPBX = document.querySelectorAll(".oferta table")[0];
