@@ -822,6 +822,109 @@ section + section,
   margin-top: 25px !important; /* separa visualmente la tabla del borde */
 }
 
+/* --- 🗒️ BLOQUE DE NOTAS INTERNAS MEJORADO --- */
+.notas-section {
+  max-width: 850px;
+  width: 100%;
+  background: #fffdf9;
+  margin: 30px auto;
+  padding: 20px 25px;
+  border: 1.5px solid #f5c7a9;
+  border-radius: 12px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+}
+
+.notas-section h3 {
+  color: #f58220;
+  margin-bottom: 15px;
+  font-size: 18px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lista-notas {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.nota-item {
+  background: #fff;
+  border-left: 4px solid #f58220;
+  border-radius: 8px;
+  padding: 12px 14px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.nota-contenido {
+  flex: 1;
+}
+
+.nota-texto {
+  color: #333;
+  font-size: 14px;
+  margin-bottom: 4px;
+  white-space: pre-wrap;
+}
+
+.nota-fecha {
+  font-size: 12px;
+  color: #777;
+}
+
+.btn-borrar-nota {
+  background: #b82319;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: opacity 0.2s;
+}
+
+.btn-borrar-nota:hover {
+  opacity: 0.8;
+}
+
+.nueva-nota {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+#nuevaNotaTexto {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #f5c7a9;
+  border-radius: 6px;
+  resize: vertical;
+  min-height: 50px;
+  font-family: inherit;
+  background: #fff;
+}
+
+.btn-add-nota {
+  background: #0c4a75;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-add-nota:hover {
+  background: #f58220;
+}
+
 
  </style>
 </head>
@@ -1170,6 +1273,19 @@ section + section,
       <div class="porcentaje" id="porcentajeAhorro">0%</div>
     </div>
   </div>
+
+  <!-- 🗒️ BLOQUE DE NOTAS INTERNAS MEJORADO -->
+<div class="notas-section">
+  <h3><i class="fas fa-sticky-note"></i> Notas Internas</h3>
+
+  <div id="listaNotas" class="lista-notas"></div>
+
+  <div class="nueva-nota">
+    <textarea id="nuevaNotaTexto" placeholder="Escribe una nueva nota..."></textarea>
+    <button id="agregarNota" class="btn-add-nota">➕ Agregar Nota</button>
+  </div>
+</div>
+
 
   <!-- 🔸 SECCIÓN DE ACCIONES FINALES -->
 <div class="acciones-finales">
@@ -1642,7 +1758,68 @@ function validarCantidades() {
 
   return valido;
 }
+// --- 🗒️ SISTEMA DE NOTAS INTERNAS CON FECHA ---
+const listaNotas = document.getElementById("listaNotas");
+const nuevaNotaTexto = document.getElementById("nuevaNotaTexto");
+const agregarNotaBtn = document.getElementById("agregarNota");
 
+// Cargar notas guardadas (si existen)
+let notas = JSON.parse(localStorage.getItem("notasTelekos")) || [];
+renderizarNotas();
+
+function renderizarNotas() {
+  listaNotas.innerHTML = "";
+  notas.forEach((nota, index) => {
+    const div = document.createElement("div");
+    div.className = "nota-item";
+    div.innerHTML = `
+      <div class="nota-contenido">
+        <div class="nota-texto">${nota.texto}</div>
+        <div class="nota-fecha">${nota.fecha}</div>
+      </div>
+      <button class="btn-borrar-nota" data-index="${index}">🗑️</button>
+    `;
+    listaNotas.appendChild(div);
+  });
+}
+
+// Agregar nueva nota
+agregarNotaBtn.addEventListener("click", () => {
+  const texto = nuevaNotaTexto.value.trim();
+  if (texto === "") {
+    alert("Escribe algo antes de agregar una nota.");
+    return;
+  }
+
+  const fecha = new Date();
+  const fechaFormateada = fecha.toLocaleDateString("es-ES", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+
+  const nuevaNota = {
+    texto,
+    fecha: `📅 ${fechaFormateada}`
+  };
+
+  notas.push(nuevaNota);
+  localStorage.setItem("notasTelekos", JSON.stringify(notas));
+  nuevaNotaTexto.value = "";
+  renderizarNotas();
+});
+
+// Borrar nota individual
+listaNotas.addEventListener("click", (e) => {
+  if (e.target.classList.contains("btn-borrar-nota")) {
+    const index = e.target.dataset.index;
+    notas.splice(index, 1);
+    localStorage.setItem("notasTelekos", JSON.stringify(notas));
+    renderizarNotas();
+  }
+});
 
 
   </script>
