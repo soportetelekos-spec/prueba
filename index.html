@@ -925,6 +925,29 @@ section + section,
   background: #f58220;
 }
 
+/* 🔧 Separación entre "Notas Internas" y "Acciones sobre la oferta" */
+.notas-section {
+  margin-bottom: 25px !important; /* separa el bloque de las acciones finales */
+}
+
+/* Evita que las secciones internas se desborden horizontalmente */
+.notas-section,
+.acciones-section,
+.form-section {
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* Asegura que el contenedor principal no se desborde */
+main, .contenedor-principal, .form-container {
+  overflow-x: hidden;
+}
+
+.row {
+  margin-right: 0;
+  margin-left: 0;
+}
 
  </style>
 </head>
