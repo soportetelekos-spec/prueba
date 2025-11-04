@@ -389,7 +389,7 @@
     <div class="oferta">
       <h1>Propuesta Comercial</h1>
       <p><strong>Fecha:</strong> <span>30/10/2025</span></p>
-      <p><strong>Empresa:</strong> <span>Cliente Ejemplo S.L.</span></p>
+      <p><strong>Empresa:</strong> <span></span></p>
 
       <h2>Servicios incluidos</h2>
       <h3>PACK PBX (CENTRALITA)</h3>
@@ -575,9 +575,23 @@ document.addEventListener("DOMContentLoaded", () => {
   let totalPBX = 0;
   let totalOtros = 0;
 
-  datos.servicios?.forEach(s => {
-    const total = (parseFloat(s.coste || 0) * parseFloat(s.cantidad || 0)) || 0;
-    const filaHTML = `
+ datos.servicios?.forEach(s => {
+  const total = (parseFloat(s.coste || 0) * parseFloat(s.cantidad || 0)) || 0;
+
+  // Palabras clave que identifican servicios PBX
+  const esPBX = pbxKeywords.some(k => s.servicio.toLowerCase().includes(k));
+
+  // Si es PBX → ocultar precios individuales (mostrar “–”)
+  const filaHTML = esPBX
+    ? `
+      <tr>
+        <td>${s.servicio}</td>
+        <td>${s.cantidad}</td>
+        <td>–</td>
+        <td>–</td>
+      </tr>
+    `
+    : `
       <tr>
         <td>${s.servicio}</td>
         <td>${s.cantidad}</td>
@@ -586,14 +600,16 @@ document.addEventListener("DOMContentLoaded", () => {
       </tr>
     `;
 
-    if (pbxKeywords.some(k => s.servicio.toLowerCase().includes(k))) {
-      tbodyPBX.insertAdjacentHTML("beforeend", filaHTML);
-      totalPBX += total;
-    } else {
-      tbodyOtros.insertAdjacentHTML("beforeend", filaHTML);
-      totalOtros += total;
-    }
-  });
+  if (esPBX) {
+    tbodyPBX.insertAdjacentHTML("beforeend", filaHTML);
+    totalPBX += total;
+  } else {
+    tbodyOtros.insertAdjacentHTML("beforeend", filaHTML);
+    totalOtros += total;
+  }
+});
+
+
 
   // Actualizar totales en las tablas
   tablaPBX.querySelector("tfoot td:last-child").textContent = totalPBX.toFixed(2) + "€";
