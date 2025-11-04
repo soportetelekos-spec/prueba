@@ -1107,7 +1107,10 @@ section + section,
             <option value="5">Numeraciones</option>
             <option value="5">Extensiones</option>
             <option value="2">Canales</option>
-            <option value="5">Hardware</option>
+             <option value="5">Hardware Fijo</option>
+         <option value="5">Hardware Inalámbrico</option>
+          <option value="5">Hardware Base Inalámbrica</option>
+       <option value="12">Hardware Multiconferencia</option>
             <option value="5">Software</option>
             <option value="19">TP 100 Nac</option>
             <option value="25">TP 200 Nac</option>
@@ -1320,17 +1323,23 @@ section + section,
       if (e.target.classList.contains("cantidad") || e.target.classList.contains("coste")) actualizarTotales();
     });
 
+
+
 // --- BOTÓN: AGREGAR SERVICIO PREDEFINIDO ---
 document.getElementById("agregarPredefinido").addEventListener("click", () => {
   const fila = document.createElement("tr");
-  fila.innerHTML = `
+  fila.innerHTML = ` 
+
     <td>
       <select class="servicioSelect">
         <option value="">-- Selecciona un servicio --</option>
         <option value="5">Numeraciones</option>
         <option value="5">Extensiones</option>
         <option value="2">Canales</option>
-        <option value="5">Hardware</option>
+        <option value="5">Hardware Fijo</option>
+         <option value="5">Hardware Inalámbrico</option>
+          <option value="5">Hardware Base Inalámbrica</option>
+       <option value="12">Hardware Multiconferencia</option>
         <option value="5">Software</option>
         <option value="19">TP 100 Nac</option>
         <option value="25">TP 200 Nac</option>
